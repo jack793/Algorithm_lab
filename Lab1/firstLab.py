@@ -9,12 +9,9 @@
 # consegna".
 
 
-import math
 import matplotlib.pyplot as plt
-import numpy as np
 
-import DPA
-from ER import gen_direct_tree
+from Lab1.ER import gen_direct_tree
 
 print("Esercizio 1\n")
 
