@@ -151,8 +151,15 @@ plt.show()
 # - Quale dei tre fenomeni spiega meglio il comportamento dell'algoritmo DPA? Spiegate brevemente perché.
 # - Quale dei tre fenomeni spiega meglio la struttura del grafo delle citazioni? Spiegate brevemente perché.
 
+# The phenomenon “rich gets richer” mimics the behaviour of the DPA process. When more nodes join the graph network,
+# with higher probability they select among a few of nodes as the neighbours that are already rich (i.e., they already
+#  have high in-degrees), thereby increasing their in-degrees again. The majority of the nodes that have low in-degrees
+#   they tend not to get selected as neighbours with high probability in this process, hence their in-degrees do not 
+#   increase. This process modeled by the algorithm DPA mimics the rich gets richer model, but is also used to explain 
+#   the six degrees of separation phenomenon.
 
-# The most widely known generative model for a subset of scale-free networks is Barabási and Albert's (1999) rich 
-# get richer generative model in which each new Web page creates links to existing Web pages with a probability 
-# distribution which is not uniform, but proportional to the current in-degree of Web pages. This model was originally 
-# invented by Derek J. de Solla Price in 1965 under the term cumulative advantage,
+# Same phenomenon “rich gets richer” can explain the citation graph network structure as well. Few of the papers that 
+# are heavily cited (rich, with high in-degrees) becomes an important paper and tend to get cited again with high 
+# probability, when a new paper is written it cites those few heavily cited papers again thereby increasing the in-degree
+#  of them (making them richer) and it cites the majority of papers with low citations (low importance) with low 
+#  probability, so they are likely to remain not cited again.
