@@ -12,6 +12,7 @@
 import matplotlib.pyplot as plt
 
 from Lab1.ER import gen_direct_tree
+from Lab1.DPA import *
 
 print("Esercizio 1\n")
 
@@ -44,10 +45,10 @@ grades_distribution = {k: v / len(nodes_grades) for k, v in grades_occurrences.i
 
 print("Grades distribution:", grades_distribution)
 plt.title("Linear scale")
-plt.plot(grades_distribution.keys(), grades_distribution.values(), "g+")
+plt.plot(grades_distribution.keys(), grades_distribution.values(), "go")
 plt.show()
 plt.title("Log log scale")
-plt.loglog(grades_distribution.keys(), grades_distribution.values(), "g+")
+plt.loglog(grades_distribution.keys(), grades_distribution.values(), "go")
 plt.show()
 
 # 2
@@ -86,10 +87,10 @@ r_grades_distribution = {k: v / len(r_nodes_grades) for k, v in r_grades_occurre
 print("Grades distribution:", r_grades_distribution)
 
 plt.title("Linear scale")
-plt.plot(r_grades_distribution.keys(), r_grades_distribution.values(), "r+")
+plt.plot(r_grades_distribution.keys(), r_grades_distribution.values(), "ro")
 plt.show()
 plt.title("Log log scale")
-plt.loglog(r_grades_distribution.keys(), r_grades_distribution.values(), "r+")
+plt.loglog(r_grades_distribution.keys(), r_grades_distribution.values(), "ro")
 plt.show()
 
 # 3
@@ -106,9 +107,9 @@ plt.show()
 
 print("\nEsercizio 3\n")
 
-dpa = DPA.DPATrial(10)
+dpa = DPATrial(10)
 
-dpa_nodes, dpa_graph = DPA.gen(1, 100)
+dpa_nodes, dpa_graph = gen(1, 100)
 
 dpa_nodes_grades = dict()
 for a, b in dpa_graph:
@@ -127,10 +128,10 @@ for g in dpa_nodes_grades.values():
 dpa_grades_distribution = {k: v / len(dpa_nodes) for k, v in dpa_grades_occurrences.items()}
 
 plt.title("Linear scale")
-plt.plot(dpa_grades_distribution.keys(), dpa_grades_distribution.values(), "b+")
+plt.plot(dpa_grades_distribution.keys(), dpa_grades_distribution.values(), "bo")
 plt.show()
 plt.title("Log log scale")
-plt.loglog(dpa_grades_distribution.keys(), dpa_grades_distribution.values(), "b+")
+plt.loglog(dpa_grades_distribution.keys(), dpa_grades_distribution.values(), "bo")
 plt.show()
 
 
@@ -163,3 +164,4 @@ plt.show()
 # probability, when a new paper is written it cites those few heavily cited papers again thereby increasing the in-degree
 #  of them (making them richer) and it cites the majority of papers with low citations (low importance) with low 
 #  probability, so they are likely to remain not cited again.
+
