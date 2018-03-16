@@ -13,10 +13,12 @@ class TestDPA(unittest.TestCase):
         g = PIGraph.gen_direct_graph_dpa(2, 4)
         print(g.adj_list())
 
-class TestUPA(unittest.TestCase):
-    def test_upa_generation(self):
-        g = PIGraph.gen_direct_graph_upa(2, 4)
-        print(g.adj_list())
+
+# TODO: UPA
+# class TestUPA(unittest.TestCase):
+#     def test_upa_generation(self):
+#         g = PIGraph.gen_direct_graph_upa(2, 4)
+#         print(g.adj_list())
 
 if __name__ == '__main__':
     unittest.main()
