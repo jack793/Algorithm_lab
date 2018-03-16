@@ -1,6 +1,6 @@
 import unittest
 
-from _PIGraph import PIIndirectGraph
+from LibGraph.PIGraph import PIIndirectGraph
 
 
 class TestAppendAndData(unittest.TestCase):

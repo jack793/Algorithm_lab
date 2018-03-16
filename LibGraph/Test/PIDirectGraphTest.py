@@ -1,6 +1,6 @@
 import unittest
 
-from _PIGraph import PIDirectGraph
+from LibGraph.PIGraph import PIDirectGraph
 
 
 class TestAppendAndData(unittest.TestCase):
@@ -25,8 +25,8 @@ class TestRemove(unittest.TestCase):
         self.assertEqual(g.adj_list(), {(1, 2)})
 
 
-class TestInOutDegree(unittest.TestCase):
-    def test_remove(self):
+class TestDegree(unittest.TestCase):
+    def test_degree(self):
         g = PIDirectGraph()
 
         g.append(4, 1)

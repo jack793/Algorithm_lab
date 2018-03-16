@@ -1,3 +1,28 @@
+from random import random
+
+
+class PIGraph:
+    @staticmethod
+    def gen_direct_graph_er(nodes, threshold):
+        g = PIDirectGraph()
+        for u in range(0, nodes):
+            for v in range(0, nodes):
+                a = random()
+                if a < threshold:
+                    g.append(u, v)
+        return g
+
+    @staticmethod
+    def gen_indirect_graph_er(nodes, threshold):
+        g = PIIndirectGraph()
+        for u in range(0, nodes):
+            for v in range(0, nodes):
+                a = random()
+                if a < threshold:
+                    g.append(u, v)
+        return g
+
+
 class _PIGraph:
     def __init__(self):
         self._adjList = {}
@@ -8,10 +33,22 @@ class PIIndirectGraph(_PIGraph):
     def append(self, node_a, node_b):
         if node_a == node_b:
             raise Exception("Same node arches are not supported")
-        if node_b not in self._adjList:
-            self._adjList[node_b] = {node_a}
-        else:
+
+        if node_a in self._adjList:
+            self._adjList[node_a].add(node_b)
+        elif node_b in self._adjList:
             self._adjList[node_b].add(node_a)
+        else:
+            self._adjList[min(node_a, node_b)] = {max(node_a, node_b)}
+
+        # if node_b not in self._adjList:
+        #     if node_a in self._adjList:
+        #         self._adjList[node_a].add(node_b)
+        #     else:
+        #         self._adjList[min(node_a, node_b)] = {max(node_a, node_b)}
+        #
+        # else:
+        #     self._adjList[min(node_a, node_b)] = {max(node_a, node_b)}
 
     def remove(self, from_node, to_node):
         if to_node in self._adjList:
