@@ -29,9 +29,9 @@ class UPATrial:
         return new_neighbours
 
 
-def gen(m,n):
+def genUPA(m, n):
     """
-    DPA algorithm to generate random graphs
+    UPA algorithm to generate random graphs
     :param m: number of nodes
     :param n: number 1 <= m <= n
     """
