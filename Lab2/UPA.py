@@ -1,7 +1,7 @@
 import random
 
 
-class DPATrial:
+class UPATrial:
     _numNodes = 0
     _nodeNumbers = []
 
@@ -37,10 +37,11 @@ def gen(m,n):
     """
     graph_nodes = set(range(0, m))
     graph = [(a, b) for a in graph_nodes for b in graph_nodes if a != b]
-    trial = DPATrial(m)
+    trial = UPATrial(m)
     for u in range(m, n):
         new_graph_nodes = trial.run_trial(m)
         graph_nodes.add(u)
         for v in new_graph_nodes:
             graph.append((u, v))
+            graph.append((v, u))
     return graph_nodes, graph
