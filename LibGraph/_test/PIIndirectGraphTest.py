@@ -5,7 +5,7 @@ import pytest
 from LibGraph.PIIndirectGraph import PIIndirectGraph
 
 
-class TestAppendRemoveAndGet(unittest.TestCase):
+class TestPIIndirectGraph(unittest.TestCase):
 
     def test_no_loops(self):
         with pytest.raises(Exception):
@@ -36,8 +36,6 @@ class TestAppendRemoveAndGet(unittest.TestCase):
         self.assertEqual(g.get_node_list(), {1, 2, 4})
         self.assertEqual(g.get_arch_list(), set())
 
-
-class TestRemove(unittest.TestCase):
     def test_remove(self):
         g = PIIndirectGraph()
         g.add_arch(1, 2)
@@ -48,8 +46,6 @@ class TestRemove(unittest.TestCase):
 
         self.assertEqual(g.get_adj_list(1), {(1, 2), (1, 3)})
 
-
-class TestNodeDegree(unittest.TestCase):
     def test_node_degree(self):
         g = PIIndirectGraph()
 
@@ -65,7 +61,3 @@ class TestNodeDegree(unittest.TestCase):
         self.assertEqual(g.get_node_degree(1), 5)
         self.assertEqual(g.get_node_degree(4), 1)
         self.assertEqual(g.get_node_degree(7), 0)
-
-
-if __name__ == '__main__':
-    unittest.main()
