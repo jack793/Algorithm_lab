@@ -19,7 +19,7 @@ class PIGraph:
             for v in range(0, nodes):
                 a = random()
                 if a < threshold:
-                    g.append(u, v)
+                    g.add_arch(u, v)
         return g
 
     @staticmethod
@@ -68,86 +68,96 @@ class PIGraph:
 class _PIGraph:
     def __init__(self):
         self._adjList = {}
+        self._nodeList = set()
+
+    def add_node(self, node):
+        self._nodeList.add(node)
+
+    def remove_node(self, node):
+        try:
+            self._nodeList.remove(node)
+        except KeyError:
+            pass
+        try:
+            self._adjList.pop(node)
+        except KeyError:
+            pass
+
+        for k in self._adjList:
+            try:
+                self._adjList[k].remove(node)
+            except KeyError:
+                pass
+
+    def get_node_list(self):
+        return self._nodeList
+
+    def add_arch(self, node_a, node_b):
+        if node_a == node_b:
+            raise Exception("Same node arches are not supported")
+
+        self.add_node(node_a)
+        self.add_node(node_b)
+
+        if node_b not in self._adjList:
+            self._adjList[node_b] = {node_a}
+        else:
+            self._adjList[node_b].add(node_a)
+
+    def remove_arch(self, node_from, node_to):
+        try:
+            self._adjList[node_to].remove(node_from)
+        except KeyError:
+            pass
+
+        try:
+            self._adjList[node_to].remove(node_from)
+        except KeyError:
+            pass
+
+    def get_arch_list(self):
+        pass
+
+    def get_adj_list(self, node):
+        pass
 
 
 class PIIndirectGraph(_PIGraph):
 
-    def append(self, node_a, node_b):
-        if node_a == node_b:
-            raise Exception("Same node arches are not supported")
+    def get_arch_list(self):
+        super().get_arch_list()
+        r = set()
+        for b in self._adjList:
+            for a in self._adjList[b]:
+                r.add((min(a, b), max(a, b)))
+        return r
 
-        if node_a in self._adjList:
-            self._adjList[node_a].add(node_b)
-        elif node_b in self._adjList:
-            self._adjList[node_b].add(node_a)
-        else:
-            self._adjList[min(node_a, node_b)] = {max(node_a, node_b)}
+    def get_adj_list(self, node):
+        super().get_adj_list(node)
+        return {(min(a, b), max(a, b)) for (a, b) in self.get_arch_list() if a == node or b == node}
 
-        # if node_b not in self._adjList:
-        #     if node_a in self._adjList:
-        #         self._adjList[node_a].add(node_b)
-        #     else:
-        #         self._adjList[min(node_a, node_b)] = {max(node_a, node_b)}
-        #
-        # else:
-        #     self._adjList[min(node_a, node_b)] = {max(node_a, node_b)}
+    def get_node_degree(self, node):
+        return len(self.get_adj_list(node))
 
-    def remove(self, from_node, to_node):
-        if to_node in self._adjList:
-            self._adjList[to_node].remove(from_node)
-        if from_node in self._adjList:
-            self._adjList[from_node].remove(to_node)
-
-    def adj_list(self):
-        """
-        Returns a set of tuples containing
-        :return:
-        """
-        return {(min(k, v), max(k, v)) for v in self._adjList
-                for k in self._adjList[v]}
-
-    def degree(self, node):
-        return len({(k, v) for (k, v) in self.adj_list() if (k == node)}) + len(
-            {(k, v) for (k, v) in self.adj_list() if (v == node)})
+    def remove_arch(self, node_a, node_b):
+        super().remove_arch(node_a, node_b)
+        super().remove_arch(node_b, node_a)
 
 
 class PIDirectGraph(_PIGraph):
 
-    def append(self, from_node, to_node):
-        if from_node == to_node:
-            raise Exception("Same node arches are not supported")
-        if to_node not in self._adjList:
-            self._adjList[to_node] = {from_node}
-        else:
-            self._adjList[to_node].add(from_node)
+    def add_arch(self, node_from, node_to):
+        super().add_arch(node_from, node_to)
 
-    def remove(self, from_node, to_node):
-        if to_node in self._adjList:
-            self._adjList[to_node].remove(from_node)
+    def get_arch_list(self):
+        r = set()
+        for b in self._adjList:
+            for a in self._adjList[b]:
+                r.add((a, b))
+        return r
 
-    def adj_list(self):
-        """
-        Returns a set of tuples containing 
-        :return: 
-        """
-        return {(k, v) for v in self._adjList
-                for k in self._adjList[v]}
+    def get_in_adj_list(self, node):
+        return {(a, b) for (a, b) in self.get_arch_list() if node == b}
 
-    def in_degree(self, node) -> int:
-        """
-        Search for a node in the graph and returns its in degree
-        :param node: node to search in the graph
-        :return: in degree of the node, if present, zero otherwise
-        """
-        if node in self._adjList:
-            return len(self._adjList[node])
-        else:
-            return 0
-
-    def out_degree(self, node) -> int:
-        """
-        Search for a node in the graph and returns its out degree
-        :param node: node to search in the graph
-        :return: out degree of the node, if present, zero otherwise
-        """
-        return len({(a, b) for (a, b) in self.adj_list() if a == node})
+    def get_out_adj_list(self, node):
+        return {(a, b) for (a, b) in self.get_arch_list() if node == a}

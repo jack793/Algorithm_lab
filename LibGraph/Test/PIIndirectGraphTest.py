@@ -1,44 +1,68 @@
 import unittest
 
+import pytest
+
 from LibGraph.PIGraph import PIIndirectGraph
 
 
-class TestAppendAndData(unittest.TestCase):
-    def test_append_and_data(self):
-        g = PIIndirectGraph()
-        g.append(1, 2)
-        g.append(1, 3)
-        g.append(1, 3)
+class TestAppendRemoveAndGet(unittest.TestCase):
 
-        self.assertEqual(g.adj_list(), {(1, 2), (1, 3)})
+    def test_no_loops(self):
+        with pytest.raises(Exception) as e_info:
+            g = PIIndirectGraph()
+            g.add_arch(1, 1)
+
+    def test_append_and_get(self):
+        g = PIIndirectGraph()
+        g.add_arch(1, 2)
+        g.add_arch(1, 3)
+        g.add_arch(1, 3)
+        g.add_arch(3, 1)
+        g.add_arch(3, 2)
+
+        g.add_node(4)
+
+        self.assertEqual(g.get_node_list(), {1, 2, 3, 4})
+        self.assertEqual(g.get_arch_list(), {(1, 2), (1, 3), (2, 3)})
+
+        g.remove_arch(2, 1)
+
+        self.assertEqual(g.get_node_list(), {1, 2, 3, 4})
+        self.assertEqual(g.get_arch_list(), {(1, 3), (2, 3)})
+
+        g.remove_node(3)
+        g.remove_node(5)
+
+        self.assertEqual(g.get_node_list(), {1, 2, 4})
+        self.assertEqual(g.get_arch_list(), set())
 
 
 class TestRemove(unittest.TestCase):
     def test_remove(self):
         g = PIIndirectGraph()
-        g.append(1, 2)
-        g.append(1, 3)
-        g.append(1, 3)
+        g.add_arch(1, 2)
+        g.add_arch(1, 3)
+        g.add_arch(1, 3)
+        g.add_arch(3, 1)
+        g.add_arch(3, 2)
 
-        g.remove(1, 3)
-
-        self.assertEqual(g.adj_list(), {(1, 2)})
+        self.assertEqual(g.get_adj_list(1), {(1, 2), (1, 3)})
 
 
-class TestInOutDegree(unittest.TestCase):
-    def test_remove(self):
+class TestNodeDegree(unittest.TestCase):
+    def test_node_degree(self):
         g = PIIndirectGraph()
 
-        g.append(4, 1)
-        g.append(5, 1)
-        g.append(6, 1)
+        g.add_arch(4, 1)
+        g.add_arch(5, 1)
+        g.add_arch(6, 1)
 
-        g.append(1, 2)
-        g.append(1, 3)
-        g.append(1, 4)
-        g.append(1, 5)
+        g.add_arch(1, 2)
+        g.add_arch(1, 3)
+        g.add_arch(1, 4)
+        g.add_arch(1, 5)
 
-        self.assertEqual(g.degree(1), 5)
+        self.assertEqual(g.get_node_degree(1), 5)
 
 
 if __name__ == '__main__':
