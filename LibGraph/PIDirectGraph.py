@@ -14,6 +14,13 @@ class PIDirectGraph(PIGraph):
                 r.add((a, b))
         return r
 
+    def get_reversed_arch_list(self):
+        r = set()
+        for b in self._adjList:
+            for a in self._adjList[b]:
+                r.add((b, a))
+        return r
+
     def get_in_adj_list(self, node):
         return {a for (a, b) in self.get_arch_list() if node == b}
 

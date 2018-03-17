@@ -24,17 +24,20 @@ class TestPIDirectGraph(unittest.TestCase):
 
         self.assertEqual(g.get_node_list(), {1, 2, 3, 4})
         self.assertEqual(g.get_arch_list(), {(1, 2), (1, 3), (3, 1), (3, 2)})
+        self.assertEqual(g.get_reversed_arch_list(), {(1, 3), (3, 1), (2, 3), (2, 1)})
 
         g.remove_arch(1, 2)
 
         self.assertEqual(g.get_node_list(), {1, 2, 3, 4})
         self.assertEqual(g.get_arch_list(), {(3, 2), (1, 3), (3, 1)})
+        self.assertEqual(g.get_reversed_arch_list(), {(1, 3), (3, 1), (2, 3)})
 
         g.remove_node(1)
         g.remove_node(5)
 
         self.assertEqual(g.get_node_list(), {2, 3, 4})
         self.assertEqual(g.get_arch_list(), {(3, 2)})
+        self.assertEqual(g.get_reversed_arch_list(), {(2, 3)})
 
     def test_in_out_adj_list(self):
         g = PIDirectGraph()
