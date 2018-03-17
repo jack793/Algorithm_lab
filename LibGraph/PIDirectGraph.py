@@ -1,3 +1,6 @@
+import math
+from collections import deque
+
 from LibGraph.PIGraph import PIGraph
 
 
@@ -7,22 +10,17 @@ class PIDirectGraph(PIGraph):
         super().add_arch(node_from, node_to)
 
     def get_arch_list(self):
-        super().get_arch_list()
-        r = set()
-        for b in self._adjList:
-            for a in self._adjList[b]:
-                r.add((a, b))
-        return r
+        return set({(a, b) for (b, r) in self._adjList.items() for a in r})
 
     def get_reversed_arch_list(self):
-        r = set()
-        for b in self._adjList:
-            for a in self._adjList[b]:
-                r.add((b, a))
-        return r
+        return set({(b, a) for (b, r) in self._adjList.items() for a in r})
 
     def get_in_adj_list(self, node):
-        return {a for (a, b) in self.get_arch_list() if node == b}
+        # return {a for (a, b) in self.get_arch_list() if node == b}
+        try:
+            return self._adjList[node]
+        except KeyError:
+            return set()
 
     def get_out_adj_list(self, node):
         return {b for (a, b) in self.get_arch_list() if node == a}
@@ -36,3 +34,42 @@ class PIDirectGraph(PIGraph):
 
     def get_node_out_degree(self, node):
         return len({(a, b) for (a, b) in self.get_arch_list() if node == a})
+
+    def get_bfs_path_from_node(self, node):
+        nodes_colors = dict()
+        nodes_distances = dict()
+        nodes_predecessors = dict()
+
+        for n in self.get_node_list():
+            nodes_colors[n] = 0
+            nodes_distances[n] = math.inf
+            nodes_predecessors[n] = None
+
+        if node not in self.get_node_list():
+            return {
+                "predecessors": nodes_predecessors,
+                "distances": nodes_distances,
+                "path": {k for k, v in nodes_colors.items() if v == 2}
+            }
+
+        nodes_colors[node] = 1
+        nodes_distances[node] = 0
+
+        q = deque([node])
+
+        while len(q) > 0:
+            u = q.popleft()
+            for v in self.get_out_adj_list(u):
+                if nodes_colors[v] == 0:
+                    nodes_colors[v] = 1
+                    nodes_distances[v] = nodes_distances[u] + 1
+                    nodes_predecessors[v] = u
+                    q.append(v)
+
+            nodes_colors[u] = 2
+
+        return {
+            "predecessors": nodes_predecessors,
+            "distances": nodes_distances,
+            "path": {k for k, v in nodes_colors.items() if v == 2}
+        }
