@@ -73,3 +73,20 @@ class PIDirectGraph(PIGraph):
             "distances": nodes_distances,
             "path": {k for k, v in nodes_colors.items() if v == 2}
         }
+
+    def get_dfs_path_from_node(self, node):
+
+        if node not in self.get_node_list():
+            return set(), dict((k, None) for k in self.get_node_list())
+
+        def rec(current_node, predecessor_node, nodes_visited, nodes_predecessors):
+            if current_node not in nodes_visited:
+                nodes_visited.add(current_node)
+                nodes_predecessors[current_node] = predecessor_node
+
+                for neighbour in self.get_out_adj_list(current_node):
+                    nodes_visited, nodes_predecessors = rec(neighbour, current_node, nodes_visited, nodes_predecessors)
+
+            return nodes_visited, nodes_predecessors
+
+        return rec(node, None, set(), dict())
