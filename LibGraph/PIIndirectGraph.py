@@ -24,6 +24,15 @@ class PIIndirectGraph(PIGraph):
         super().remove_arch(node_a, node_b)
         super().remove_arch(node_b, node_a)
 
+    def undirected_connected_components(self, G):
+        CC = set()
+        for v in G:
+            for i in CC:
+                if v not in CC[i]:
+                    comp = 
+
+
+
     def get_dfs_path_from_node(self, node):
         if node not in self.get_node_list():
             return namedtuple("DFS", ["path", "predecessors"])(
