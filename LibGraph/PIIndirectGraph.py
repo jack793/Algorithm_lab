@@ -24,14 +24,17 @@ class PIIndirectGraph(PIGraph):
         super().remove_arch(node_a, node_b)
         super().remove_arch(node_b, node_a)
 
-    def undirected_connected_components(self, G):
-        CC = set()
-        for v in G:
-            for i in CC:
-                if v not in CC[i]:
-                    comp = 
+    def undirected_connected_components(self):
+        connected_components = set()
 
+        for v in self.get_node_list():
+            if v not in {item for component in connected_components for item in component}:
+                comp, _ = self.get_dfs_path_from_node(v)
 
+                print("COMP",comp)
+                connected_components.add(frozenset(comp))
+
+        return connected_components
 
     def get_dfs_path_from_node(self, node):
         if node not in self.get_node_list():
