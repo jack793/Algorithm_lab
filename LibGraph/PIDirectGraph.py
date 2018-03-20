@@ -1,5 +1,5 @@
 import math
-from collections import deque
+from collections import deque, namedtuple
 
 from LibGraph.PIGraph import PIGraph
 
@@ -46,11 +46,9 @@ class PIDirectGraph(PIGraph):
             nodes_predecessors[n] = None
 
         if node not in self.get_node_list():
-            return {
-                "predecessors": nodes_predecessors,
-                "distances": nodes_distances,
-                "path": {k for k, v in nodes_colors.items() if v == 2}
-            }
+            return namedtuple("BFS", ["predecessors", "distances", "path"])(nodes_predecessors, nodes_distances,
+                                                                            {k for k, v in nodes_colors.items() if
+                                                                             v == 2})
 
         nodes_colors[node] = 1
         nodes_distances[node] = 0
@@ -68,16 +66,13 @@ class PIDirectGraph(PIGraph):
 
             nodes_colors[u] = 2
 
-        return {
-            "predecessors": nodes_predecessors,
-            "distances": nodes_distances,
-            "path": {k for k, v in nodes_colors.items() if v == 2}
-        }
+        return namedtuple("BFS", ["predecessors", "distances", "path"])(nodes_predecessors, nodes_distances,
+                                                                        {k for k, v in nodes_colors.items() if v == 2})
 
     def get_dfs_path_from_node(self, node):
 
         if node not in self.get_node_list():
-            return set(), dict((k, None) for k in self.get_node_list())
+            return namedtuple("DFS", ["path", "predecessors"])(set(), dict((k, None) for k in self.get_node_list()))
 
         def rec(current_node, predecessor_node, nodes_visited, nodes_predecessors):
             if current_node not in nodes_visited:
@@ -87,6 +82,6 @@ class PIDirectGraph(PIGraph):
                 for neighbour in self.get_out_adj_list(current_node):
                     nodes_visited, nodes_predecessors = rec(neighbour, current_node, nodes_visited, nodes_predecessors)
 
-            return nodes_visited, nodes_predecessors
+            return namedtuple("DFS", ["path", "predecessors"])(nodes_visited,nodes_predecessors)
 
         return rec(node, None, set(), dict())
