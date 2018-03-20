@@ -82,6 +82,6 @@ class PIDirectGraph(PIGraph):
                 for neighbour in self.get_out_adj_list(current_node):
                     nodes_visited, nodes_predecessors = rec(neighbour, current_node, nodes_visited, nodes_predecessors)
 
-            return namedtuple("DFS", ["path", "predecessors"])(nodes_visited,nodes_predecessors)
+            return namedtuple("DFS", ["path", "predecessors"])(nodes_visited, nodes_predecessors)
 
         return rec(node, None, set(), dict())

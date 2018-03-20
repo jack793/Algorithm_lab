@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 from LibGraph.PIGraph import PIGraph
 
 
@@ -21,3 +23,20 @@ class PIIndirectGraph(PIGraph):
     def remove_arch(self, node_a, node_b):
         super().remove_arch(node_a, node_b)
         super().remove_arch(node_b, node_a)
+
+    def get_dfs_path_from_node(self, node):
+        if node not in self.get_node_list():
+            return namedtuple("DFS", ["path", "predecessors"])(
+                set(), dict((k, None) for k in self.get_node_list()))
+
+        def rec(current_node, predecessor_node, nodes_visited, nodes_predecessors):
+            if current_node not in nodes_visited:
+                nodes_visited.add(current_node)
+                nodes_predecessors[current_node] = predecessor_node
+
+                for neighbour in self.get_adj_list(current_node):
+                    nodes_visited, nodes_predecessors = rec(neighbour, current_node, nodes_visited, nodes_predecessors)
+
+            return namedtuple("DFS", ["path", "predecessors"])(nodes_visited, nodes_predecessors)
+
+        return rec(node, None, set(), dict())
