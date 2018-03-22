@@ -1,4 +1,5 @@
 from collections import namedtuple
+from random import sample
 
 from LibGraph.PIGraph import PIGraph
 

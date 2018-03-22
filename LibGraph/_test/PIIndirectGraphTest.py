@@ -80,7 +80,7 @@ class TestPIIndirectGraph(unittest.TestCase):
 
         nodes_visited, nodes_predecessors = g.get_dfs_path_from_node(6)
 
-        self.assertSetEqual(nodes_visited, {1, 2, 3, 4, 5, 6})
+        self.assertSetEqual(nodes_visited, {1, 2, 3,4, 5, 6})
         self.assertDictEqual(nodes_predecessors, {1: 2, 2: 3, 3: 6, 4: 1, 5: 4, 6: None})
 
         nodes_visited, nodes_predecessors = g.get_dfs_path_from_node(7)
