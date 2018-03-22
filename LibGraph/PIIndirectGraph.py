@@ -15,7 +15,7 @@ class PIIndirectGraph(PIGraph):
 
     def get_adj_list(self, node):
         super().get_adj_list(node)
-        return {(min(a, b), max(a, b)) for (a, b) in self.get_arch_list() if a == node or b == node}
+        return {(a if b == node else b) for (a, b) in self.get_arch_list() if a == node or b == node}
 
     def get_node_degree(self, node):
         return super().get_node_degree(node)
@@ -23,6 +23,16 @@ class PIIndirectGraph(PIGraph):
     def remove_arch(self, node_a, node_b):
         super().remove_arch(node_a, node_b)
         super().remove_arch(node_b, node_a)
+
+    def undirected_connected_components(self):
+        connected_components = set()
+
+        for v in self.get_node_list():
+            if v not in {item for component in connected_components for item in component}:
+                comp, _ = self.get_dfs_path_from_node(v)
+                connected_components.add(frozenset(comp))
+
+        return connected_components
 
     def get_dfs_path_from_node(self, node):
         if node not in self.get_node_list():
