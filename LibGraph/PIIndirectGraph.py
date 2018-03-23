@@ -6,6 +6,10 @@ from LibGraph.PIGraph import PIGraph
 
 class PIIndirectGraph(PIGraph):
 
+    def add_arch(self, node_a, node_b):
+        super().add_arch(node_a, node_b)
+        super().add_arch(node_b, node_a)
+
     def get_arch_list(self):
         super().get_arch_list()
         r = set()
@@ -16,8 +20,10 @@ class PIIndirectGraph(PIGraph):
 
     def get_adj_list(self, node):
         super().get_adj_list(node)
-        arch_list = self.get_arch_list()
-        return {(a if b == node else b) for (a, b) in arch_list if a == node or b == node}
+        try:
+            return self.get_raw_adj_list()[node]
+        except KeyError:
+            return {}
 
     def get_node_degree(self, node):
         return super().get_node_degree(node)
@@ -76,7 +82,8 @@ class PIIndirectGraph(PIGraph):
                 nodes_visited.add(current_node)
                 nodes_predecessors[current_node] = predecessor_node
 
-                for neighbour in self.get_adj_list(current_node):
+                node_adj = self.get_adj_list(current_node)
+                for neighbour in node_adj:
                     nodes_visited, nodes_predecessors = rec(neighbour, current_node, nodes_visited, nodes_predecessors)
 
             return namedtuple("DFS", ["path", "predecessors"])(nodes_visited, nodes_predecessors)
@@ -88,7 +95,7 @@ class PIIndirectGraph(PIGraph):
         node_list = self.get_node_list()
         for v in node_list:
             if v not in {item for component in connected_components for item in component}:
-                _, _, comp = self.get_bfs_path_from_node(v)
+                comp, _ = self.get_dfs_path_from_node(v)
                 connected_components.add(frozenset(comp))
 
         return connected_components

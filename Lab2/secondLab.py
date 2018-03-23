@@ -8,13 +8,13 @@ from random import sample
 
 from LibGraph.gen.PIGen import PIGen
 
-m = 2
-n = 1476
-p = 0.00145290
-
 # m = 2
-# n = 500
-# p = 0.05
+# n = 1476
+# p = 0.00145290
+
+m = 2
+n = 500
+p = 0.05
 
 graph = PIGen.gen_indirect_graph_upa(m, n)
 
