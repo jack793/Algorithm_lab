@@ -10,10 +10,12 @@ class PIDirectGraph(PIGraph):
         super().add_arch(node_from, node_to)
 
     def get_arch_list(self):
-        return set({(a, b) for (b, r) in self._adjList.items() for a in r})
+        adj_list_items = self.get_raw_adj_list().items()
+        return set({(a, b) for (b, r) in adj_list_items for a in r})
 
     def get_reversed_arch_list(self):
-        return set({(b, a) for (b, r) in self._adjList.items() for a in r})
+        adj_list_items = self.get_raw_adj_list().items()
+        return set({(b, a) for (b, r) in adj_list_items for a in r})
 
     def get_in_adj_list(self, node):
         # return {a for (a, b) in self.get_arch_list() if node == b}
@@ -23,32 +25,42 @@ class PIDirectGraph(PIGraph):
             return set()
 
     def get_out_adj_list(self, node):
-        return {b for (a, b) in self.get_arch_list() if node == a}
+        arch_list = self.get_arch_list()
+        return {b for (a, b) in arch_list if node == a}
 
     def get_adj_list(self, node):
         super().get_adj_list(node)
-        return {(a, b) for (a, b) in self.get_arch_list() if node == a or node == b}
+        arch_list = self.get_arch_list()
+        return {(a, b) for (a, b) in arch_list if node == a or node == b}
 
     def get_node_in_degree(self, node):
-        return len({(a, b) for (a, b) in self.get_arch_list() if node == b})
+        arch_list = self.get_arch_list()
+        return len({(a, b) for (a, b) in arch_list if node == b})
 
     def get_node_out_degree(self, node):
-        return len({(a, b) for (a, b) in self.get_arch_list() if node == a})
+        adj_list = self.get_raw_adj_list()
+        try:
+            return len(adj_list[node])
+        except KeyError:
+            return 0
 
     def get_bfs_path_from_node(self, node):
         nodes_colors = dict()
         nodes_distances = dict()
         nodes_predecessors = dict()
 
-        for n in self.get_node_list():
+        node_list = self.get_node_list()
+
+        for n in node_list:
             nodes_colors[n] = 0
             nodes_distances[n] = math.inf
             nodes_predecessors[n] = None
 
-        if node not in self.get_node_list():
-            return namedtuple("BFS", ["predecessors", "distances", "path"])(nodes_predecessors, nodes_distances,
-                                                                            {k for k, v in nodes_colors.items() if
-                                                                             v == 2})
+        if node not in node_list:
+            return namedtuple("BFS", ["predecessors", "distances", "path"])(
+                nodes_predecessors, nodes_distances,
+                {k for k, v in nodes_colors.items() if
+                 v == 2})
 
         nodes_colors[node] = 1
         nodes_distances[node] = 0
@@ -71,8 +83,10 @@ class PIDirectGraph(PIGraph):
 
     def get_dfs_path_from_node(self, node):
 
-        if node not in self.get_node_list():
-            return namedtuple("DFS", ["path", "predecessors"])(set(), dict((k, None) for k in self.get_node_list()))
+        node_list = self.get_node_list()
+
+        if node not in node_list:
+            return namedtuple("DFS", ["path", "predecessors"])(set(), dict((k, None) for k in node_list))
 
         def rec(current_node, predecessor_node, nodes_visited, nodes_predecessors):
             if current_node not in nodes_visited:

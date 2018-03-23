@@ -8,13 +8,13 @@ from random import sample
 
 from LibGraph.gen.PIGen import PIGen
 
-# m = 2
-# n = 1476
-# p = 0.00145290
-
 m = 2
-n = 110
-p = 0.05
+n = 1476
+p = 0.00145290
+
+# m = 2
+# n = 500
+# p = 0.05
 
 graph = PIGen.gen_indirect_graph_upa(m, n)
 
@@ -23,11 +23,14 @@ cc = graph.get_connected_components()
 resilience_values = [graph.get_resilience()]
 
 for i in range(n):
+    print("I:", i)
     node = sample(graph.get_node_list(), 1)[0]
+    print("\tnode:", node)
     graph.remove_node(node)
     res = graph.get_resilience()
-    print("%d:" % i, res)
+    print("\tres:", res)
     resilience_values.append(res)
+    print("\trvalues:", resilience_values)
 
 print("LEN:", len(resilience_values))
 print(resilience_values)
