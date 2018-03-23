@@ -26,6 +26,9 @@ class PIGraph:
     def get_node_list(self) -> set:
         return self._nodeList
 
+    def get_raw_adj_list(self):
+        return self._adjList
+
     def add_arch(self, node_a, node_b):
         if node_a == node_b:
             raise Exception("Same node arches are not supported")

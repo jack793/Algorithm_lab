@@ -1,5 +1,5 @@
-from collections import namedtuple
-from random import sample
+from collections import namedtuple, deque
+from math import inf
 
 from LibGraph.PIGraph import PIGraph
 
@@ -25,15 +25,43 @@ class PIIndirectGraph(PIGraph):
         super().remove_arch(node_a, node_b)
         super().remove_arch(node_b, node_a)
 
-    def undirected_connected_components(self):
-        connected_components = set()
+    def get_bfs_path_from_node(self, node):
+        nodes_colors = dict()
+        nodes_distances = dict()
+        nodes_predecessors = dict()
 
-        for v in self.get_node_list():
-            if v not in {item for component in connected_components for item in component}:
-                comp, _ = self.get_dfs_path_from_node(v)
-                connected_components.add(frozenset(comp))
+        node_list = self.get_node_list()
 
-        return connected_components
+        for n in node_list:
+            nodes_colors[n] = 0
+            nodes_distances[n] = inf
+            nodes_predecessors[n] = None
+
+        if node not in node_list:
+            return namedtuple("BFS", ["predecessors", "distances", "path"])(
+                nodes_predecessors, nodes_distances,
+                {k for k, v in nodes_colors.items() if
+                 v == 2})
+
+        nodes_colors[node] = 1
+        nodes_distances[node] = 0
+
+        q = deque([node])
+
+        while len(q) > 0:
+            u = q.popleft()
+            for v in self.get_adj_list(u):
+                if nodes_colors[v] == 0:
+                    nodes_colors[v] = 1
+                    nodes_distances[v] = nodes_distances[u] + 1
+                    nodes_predecessors[v] = u
+                    q.append(v)
+
+            nodes_colors[u] = 2
+
+        return namedtuple("BFS", ["predecessors", "distances", "path"])(
+            nodes_predecessors, nodes_distances,
+            {k for k, v in nodes_colors.items() if v == 2})
 
     def get_dfs_path_from_node(self, node):
         if node not in self.get_node_list():
@@ -51,3 +79,20 @@ class PIIndirectGraph(PIGraph):
             return namedtuple("DFS", ["path", "predecessors"])(nodes_visited, nodes_predecessors)
 
         return rec(node, None, set(), dict())
+
+    def get_connected_components(self):
+        connected_components = set()
+
+        for v in self.get_node_list():
+            if v not in {item for component in connected_components for item in component}:
+                _, _, comp = self.get_bfs_path_from_node(v)
+                connected_components.add(frozenset(comp))
+
+        return connected_components
+
+    def get_resilience(self):
+        try:
+            v = max(self.get_connected_components(), key=len)
+            return len(v)
+        except ValueError:
+            return 0
