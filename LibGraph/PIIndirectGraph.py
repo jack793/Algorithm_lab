@@ -1,4 +1,4 @@
-from collections import namedtuple, deque
+from collections import deque
 from math import inf
 
 from LibGraph.PIGraph import PIGraph
@@ -45,10 +45,12 @@ class PIIndirectGraph(PIGraph):
             nodes_predecessors[n] = None
 
         if node not in node_list:
-            return namedtuple("BFS", ["predecessors", "distances", "path"])(
-                nodes_predecessors, nodes_distances,
+            return (
+                nodes_predecessors,
+                nodes_distances,
                 {k for k, v in nodes_colors.items() if
-                 v == 2})
+                 v == 2}
+            )
 
         nodes_colors[node] = 1
         nodes_distances[node] = 0
@@ -67,15 +69,19 @@ class PIIndirectGraph(PIGraph):
 
             nodes_colors[u] = 2
 
-        return namedtuple("BFS", ["predecessors", "distances", "path"])(
-            nodes_predecessors, nodes_distances,
-            {k for k, v in nodes_colors.items() if v == 2})
+        return (
+            nodes_predecessors,
+            nodes_distances,
+            {k for k, v in nodes_colors.items() if v == 2}
+        )
 
     def get_dfs_path_from_node(self, node):
         node_list = self.get_node_list()
         if node not in node_list:
-            return namedtuple("DFS", ["path", "predecessors"])(
-                set(), dict((k, None) for k in node_list))
+            return (
+                set(),
+                dict((k, None) for k in node_list)
+            )
 
         def rec(current_node, predecessor_node, nodes_visited, nodes_predecessors):
             if current_node not in nodes_visited:
@@ -86,7 +92,7 @@ class PIIndirectGraph(PIGraph):
                 for neighbour in node_adj:
                     nodes_visited, nodes_predecessors = rec(neighbour, current_node, nodes_visited, nodes_predecessors)
 
-            return namedtuple("DFS", ["path", "predecessors"])(nodes_visited, nodes_predecessors)
+            return nodes_visited, nodes_predecessors
 
         return rec(node, None, set(), dict())
 

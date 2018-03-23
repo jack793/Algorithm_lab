@@ -74,23 +74,23 @@ class TestPIIndirectGraph(unittest.TestCase):
         g.add_arch(6, 4)
         g.add_arch(3, 6)
 
-        res = g.get_bfs_path_from_node(1)
+        predecessors, distances, path = g.get_bfs_path_from_node(1)
 
-        self.assertDictEqual(res.predecessors, {1: None, 2: 1, 3: 2, 4: 1, 5: 4, 6: 4})
-        self.assertDictEqual(res.distances, {1: 0, 2: 1, 3: 2, 4: 1, 5: 2, 6: 2})
-        self.assertSetEqual(res.path, {1, 2, 3, 4, 5, 6})
+        self.assertDictEqual(predecessors, {1: None, 2: 1, 3: 2, 4: 1, 5: 4, 6: 4})
+        self.assertDictEqual(distances, {1: 0, 2: 1, 3: 2, 4: 1, 5: 2, 6: 2})
+        self.assertSetEqual(path, {1, 2, 3, 4, 5, 6})
 
-        res = g.get_bfs_path_from_node(6)
+        predecessors, distances, path = g.get_bfs_path_from_node(6)
 
-        self.assertDictEqual(res.predecessors, {1: 4, 2: 3, 3: 6, 4: 6, 5: 6, 6: None})
-        self.assertDictEqual(res.distances, {1: 2, 2: 2, 3: 1, 4: 1, 5: 1, 6: 0})
-        self.assertSetEqual(g.get_bfs_path_from_node(6).path, {1, 2, 3, 4, 5, 6})
+        self.assertDictEqual(predecessors, {1: 4, 2: 3, 3: 6, 4: 6, 5: 6, 6: None})
+        self.assertDictEqual(distances, {1: 2, 2: 2, 3: 1, 4: 1, 5: 1, 6: 0})
+        self.assertSetEqual(path, {1, 2, 3, 4, 5, 6})
 
-        res = g.get_bfs_path_from_node(7)
+        predecessors, distances, path = g.get_bfs_path_from_node(7)
 
-        self.assertDictEqual(res.predecessors, {1: None, 2: None, 3: None, 4: None, 5: None, 6: None})
-        self.assertDictEqual(res.distances, {1: inf, 2: inf, 3: inf, 4: inf, 5: inf, 6: inf})
-        self.assertSetEqual(res.path, set())
+        self.assertDictEqual(predecessors, {1: None, 2: None, 3: None, 4: None, 5: None, 6: None})
+        self.assertDictEqual(distances, {1: inf, 2: inf, 3: inf, 4: inf, 5: inf, 6: inf})
+        self.assertSetEqual(path, set())
 
     def test_dfs(self):
         g = PIIndirectGraph()
