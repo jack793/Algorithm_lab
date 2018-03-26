@@ -1,2 +1,8 @@
 # Algorithm_lab
-Laboratory exercises from Algorithm course - master deg CS UNIPD
+Laboratory exercises for Algorithm course - Master Deg. CS University of Padua
+
+## Students involved
+- Berto Filippo
+- Fasolato Francesco
+- Zecchin Giacomo
+
