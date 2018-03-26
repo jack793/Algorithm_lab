@@ -6,7 +6,6 @@
 # mentre l'asse verticale alla dimensione della componente connessa più grande rimasta dopo aver rimosso un certo
 # numero di nodi. Aggiungete una legenda al grafico che permetta di distinguere le tre curve e che specifici i valori
 #  di p e m utilizzati. Allegate il file con la figura nell'apposito spazio.
-from operator import itemgetter
 from random import sample
 
 from matplotlib import pyplot as plt
@@ -90,31 +89,37 @@ def es_greedy_choice(real_graph, er_graph, upa_graph):
     res_er_graph = [er_g.get_resilience()]
     res_upa_graph = [upa_g.get_resilience()]
 
-    for i in range(len(real_graph.get_node_list())):
+    node_list = real_graph.get_node_list()
+    node_list = sorted(node_list, key=lambda v: len(real_graph.get_adj_list(v)), reverse=True)
+    for i in range(len(node_list)):
+        node = node_list[i]
         print("I:", i)
-        real_graph_node_zip = map((lambda v: (v, len(real_graph.get_adj_list(v)))), real_graph.get_node_list())
-        node = max(real_graph_node_zip, key=itemgetter(1))[0]
-        print("\tn:", node, len(real_graph.get_adj_list(node)))
+        print("\tn:", node)
+        print("\ta:", len(real_graph.get_adj_list(node)))
         real_graph.remove_node(node)
         res = real_graph.get_resilience()
         print("\tr:", res)
         res_real_graph.append(res)
 
-    for i in range(len(er_graph.get_node_list())):
+    node_list = er_graph.get_node_list()
+    node_list = sorted(node_list, key=lambda v: len(er_graph.get_adj_list(v)), reverse=True)
+    for i in range(len(node_list)):
+        node = node_list[i]
         print("I:", i)
-        er_graph_node_zip = map((lambda v: (v, len(er_graph.get_adj_list(v)))), er_graph.get_node_list())
-        node = max(er_graph_node_zip, key=itemgetter(1))[0]
-        print("\tn:", node, len(er_graph.get_adj_list(node)))
+        print("\tn:", node)
+        print("\ta:", len(real_graph.get_adj_list(node)))
         er_graph.remove_node(node)
         res = er_graph.get_resilience()
         print("\tr:", res)
         res_er_graph.append(res)
 
-    for i in range(len(upa_graph.get_node_list())):
+    node_list = upa_graph.get_node_list()
+    node_list = sorted(node_list, key=lambda v: len(upa_graph.get_adj_list(v)), reverse=True)
+    for i in range(len(node_list)):
+        node = node_list[i]
         print("I:", i)
-        upa_graph_node_zip = map((lambda v: (v, len(upa_graph.get_adj_list(v)))), upa_graph.get_node_list())
-        node = max(upa_graph_node_zip, key=itemgetter(1))[0]
-        print("\tn:", node, len(upa_graph.get_adj_list(node)))
+        print("\tn:", node)
+        print("\ta:", len(real_graph.get_adj_list(node)))
         upa_graph.remove_node(node)
         res = upa_graph.get_resilience()
         print("\tr:", res)
@@ -176,6 +181,6 @@ def es_twenty_attack_greedy(real_graph, er_graph, upa_graph):
 
 
 # es_random_choice(real_g, er_g, upa_g)
-# es_twenty_attack_random(real_g, er_g, upa_g)
-es_greedy_choice(real_g, er_g, upa_g)
-es_twenty_attack_greedy(real_g, er_g, upa_g)
+es_twenty_attack_random(real_g, er_g, upa_g)
+# es_greedy_choice(real_g, er_g, upa_g)
+# es_twenty_attack_greedy(real_g, er_g, upa_g)
