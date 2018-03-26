@@ -9,3 +9,16 @@
 # l'andamento dell'algoritmo in un grafico a linee dove l'asse x corrisponde alle capacità e l'asse y al tempo di
 # percorrenza. Il grafico deve mostrare come cresce la capacità ed il tempo di percorrenza al crescere del numero di
 # percorsi inseriti nel piano dall'algoritmo.
+
+
+# 2
+# Qual'è la capacità massima di veicoli che possono entrare in città dai tre nodi sorgente? Qual'è la capacità
+# massima di veicoli che possono giungere contemporaneamente ai sei ospedali di destinazione? Confrontate questi due
+# valori con la capacità massima del piano che avete trovato con CCRP: dove si trova il collo di bottiglia?
+
+
+# 3
+#
+# Spiegate brevemente come avete implementato la coda di priorità nell'algoritmo di Dijkstra per la ricerca dei
+# cammini minimi. Qual'è la complessità delle operazioni di base della vostra implementazione: creazione della coda,
+# estrazione del minimo e decremento della chiave? 
