@@ -79,6 +79,7 @@ class PIMapDirectGraph:
             for v in out_adj:
                 if time_from_source[u] + self._time[u][v] < time_from_source[v]:
                     time_from_source[v] = time_from_source[u] + self._time[u][v]
+                    print(time_from_source[v])
                     predecessors[v] = u
                     for i in range(len(q)):
                         [k, w] = q[i]
