@@ -183,4 +183,4 @@ def es_twenty_attack_greedy(real_graph, er_graph, upa_graph):
 # es_random_choice(real_g, er_g, upa_g)
 es_twenty_attack_random(real_g, er_g, upa_g)
 # es_greedy_choice(real_g, er_g, upa_g)
-# es_twenty_attack_greedy(real_g, er_g, upa_g)
+es_twenty_attack_greedy(real_g, er_g, upa_g)
