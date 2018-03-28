@@ -53,7 +53,7 @@ class PIMapDirectGraph:
             self._time[node_from].pop(node)
         self._graph.remove_node(node)
 
-    def get_sssp_dijkstra(self, source_node, target_node):
+    def get_sssp_dijkstra(self, source_node):
         time_from_source = dict()
         predecessors = dict()
         initial_node_list = self._graph.get_node_list()
@@ -89,3 +89,50 @@ class PIMapDirectGraph:
                             break
 
         return time_from_source, predecessors
+
+    def ccrp(self, source_nodes, destination_nodes):
+        i = 0
+        while i in self.get_node_list():
+            i += 1
+
+        self.add_node(i)  # add super_source to node_list
+
+        for j in source_nodes:
+            self.add_arch(i, source_nodes[j], 0, inf)
+
+        plan = dict()
+        _, predecessors = self.get_sssp_dijkstra(i)
+
+        ##### DA QUI INIZIA IL CICLO REPEAT UNTIL PATH != NULL ###
+        cont = -1
+
+        for k in destination_nodes:
+            path = set()
+            z = k
+            cont += 1
+            while z != i:
+                path.add(z)
+                z = predecessors[z]
+
+            path.add(z)
+            plan[cont] = path   # set of set
+
+        flow = inf
+
+        # se k è vuoto, alla fine plan[cont] = plan[-1] mi deve sollevare un'eccezione che il grafo è vuoto
+
+        for a in range(len(plan[cont]), 1):
+            if self._capacity[a][a-1] < flow:
+                flow = self._capacity[a][a-1]
+
+        for b in range(len(plan[cont]), 1):
+            self._capacity[a][a-1] -= flow
+            if self._capacity[a][a-1] == 0:
+                self.remove_arch(a, a-1)
+
+
+
+
+
+
+
