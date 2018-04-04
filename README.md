@@ -1,5 +1,5 @@
 # Algorithm_lab
-Laboratory exercises for Algorithm course - Master Deg. CS University of Padua
+Laboratory exercises for Algorithm course - Master's degree in CS at University of Padua
 
 ## Students involved
 - Berto Filippo
