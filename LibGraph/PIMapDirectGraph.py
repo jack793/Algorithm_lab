@@ -54,44 +54,13 @@ class PIMapDirectGraph:
             self._time[node_from].pop(node)
         self._graph.remove_node(node)
 
-    # def get_sssp_dijkstra(self, source_node):
-    #     time_from_source = dict()
-    #     predecessors = dict()
-    #     initial_node_list = self._graph.get_node_list()
-    #
-    #     # INIT_SSSP
-    #     for node in initial_node_list:
-    #         time_from_source[node] = inf
-    #         predecessors[node] = None
-    #
-    #     time_from_source[source_node] = 0
-    #
-    #     q = []
-    #     for k, v in time_from_source.items():
-    #         heapq.heappush(q, [v, k])
-    #
-    #     j = 0
-    #     while len(q) > 0:
-    #         [_, u] = heapq.heappop(q)
-    #         j += 1
-    #         print("i:", j)
-    #         print("n:", u)
-    #         out_adj = self._graph.get_out_adj_list(u)
-    #         for v in out_adj:
-    #             if time_from_source[u] + self._time[u][v] < time_from_source[v]:
-    #                 time_from_source[v] = time_from_source[u] + self._time[u][v]
-    #                 print(time_from_source[v])
-    #                 predecessors[v] = u
-    #                 for i in range(len(q)):
-    #                     [k, w] = q[i]
-    #                     if w == v:
-    #                         q[i] = [time_from_source[v], v]
-    #                         heapq._siftup(q, i)
-    #                         break
-    #
-    #     return time_from_source, predecessors
-
-    def get_sssp_dijkstra(self, source_node):
+    def get_sssp_dijkstra(self, source_node: object) -> (set(), dict()):
+        """
+        Find the shortest path from a source node to any other accessible node :param source_node: source of the path
+        :param source_node Node from which start from
+        :return tuple containing the set of visited nodes and a dictionary of the distance between the source and any
+        of the previous nodes
+        """
 
         visited = {source_node: 0}
         heap = [(0, source_node)]
