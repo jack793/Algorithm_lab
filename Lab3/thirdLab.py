@@ -33,7 +33,7 @@ def read_graph():
 
 
 g = read_graph()
-print(g.get_sssp_dijkstra(min(g.get_node_list()), max(g.get_node_list())))
+print(g.get_sssp_dijkstra(min(g.get_node_list())))
 
 print("FINE")
 
