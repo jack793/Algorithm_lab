@@ -56,79 +56,78 @@ class PIMapDirectGraph:
 
     def get_sssp_dijkstra(self, source_node: object) -> (set(), dict()):
         """
-        Find the shortest path from a source node to any other accessible node :param source_node: source of the path
-        :param source_node Node from which start from
-        :return tuple containing the set of visited nodes and a dictionary of the distance between the source and any
-        of the previous nodes
+        Find the shortest predecessors from a source node to any other accessible node :param source_node: Node from
+        which start the search :return tuple containing the set of distances of the nodes from the source and a
+        dictionary of the predecessors of each node visited
         """
 
-        visited = {source_node: 0}
+        distances = {source_node: 0}
         heap = [(0, source_node)]
-        path = {}
+        predecessors = defaultdict()
 
         nodes = set(self.get_node_list())
-
-        i = 0
 
         while nodes and heap:
             current_weight, min_node = heapq.heappop(heap)
 
-            i += 1
-            print(i)
-
-            try:
-                while min_node not in nodes:
-                    current_weight, min_node = heapq.heappop(heap)
-            except IndexError:
-                break
+            while min_node not in nodes:
+                current_weight, min_node = heapq.heappop(heap)
 
             nodes.remove(min_node)
 
             for v in self._graph.get_out_adj_list(min_node):
                 weight = current_weight + self._time[min_node][v]
-                if v not in visited or weight < visited[v]:
-                    visited[v] = weight
+                if v not in distances or weight < distances[v]:
+                    distances[v] = weight
                     heapq.heappush(heap, (weight, v))
-                    path[v] = min_node
+                    predecessors[v] = min_node
 
-        return visited, path
+        return distances, predecessors
 
-    def ccrp(self, source_nodes, destination_nodes):
-        i = 0
-        while i in self.get_node_list():
-            i += 1
+    def ccrp(self, source_nodes: set(), destination_nodes: set()):
+        super_node_index = max(self.get_node_list()) + 1
 
-        self.add_node(i)  # add super_source to node_list
+        self.add_node(super_node_index)  # add super_source to node_list
 
-        for j in source_nodes:
-            self.add_arch(i, source_nodes[j], 0, inf)
+        for i in source_nodes:
+            self.add_arch(super_node_index, source_nodes[i], 0, inf)
 
-        plan = dict()
-        _, predecessors = self.get_sssp_dijkstra(i)
+        plan = set()
+        distances, predecessors = self.get_sssp_dijkstra(super_node_index)
 
-        ##### DA QUI INIZIA IL CICLO REPEAT UNTIL PATH != NULL ###
-        cont = -1
+        for d in destination_nodes:
+            path = []
+            try:
+                prec = d
+                while prec is not None:
+                    path.append(prec)
+                    prec = predecessors[prec]
+                    if prec in source_nodes:
+                        plan.add(reversed(path))
+                        break
+            except KeyError:
+                continue
 
-        for k in destination_nodes:
-            path = set()
-            z = k
-            cont += 1
-            while z != i:
-                path.add(z)
-                z = predecessors[z]
+    def get_node_out_degree(self, node):
+        return self._graph.get_node_out_degree(node)
 
-            path.add(z)
-            plan[cont] = path  # set of set
+    def get_node_in_degree(self, node):
+        return self._graph.get_node_out_degree(node)
 
-        flow = inf
+    def get_node_degree(self, node):
+        return self._graph.get_node_degree(node)
 
-        # se k è vuoto, alla fine plan[cont] = plan[-1] mi deve sollevare un'eccezione che il grafo è vuoto
+    def get_adj_list(self, node):
+        return self._graph.get_adj_list(node)
 
-        for a in range(len(plan[cont]), 1):
-            if self._capacity[a][a - 1] < flow:
-                flow = self._capacity[a][a - 1]
+    def get_in_adj_list(self, node):
+        return self._graph.get_in_adj_list(node)
 
-        for b in range(len(plan[cont]), 1):
-            self._capacity[a][a - 1] -= flow
-            if self._capacity[a][a - 1] == 0:
-                self.remove_arch(a, a - 1)
+    def get_out_adj_list(self, node):
+        return self._graph.get_out_adj_list(node)
+
+    def get_bfs_path_from_node(self, node):
+        return self._graph.get_bfs_path_from_node(node)
+
+    def get_dfs_path_from_node(self, node):
+        return self._graph.get_dfs_path_from_node(node)
