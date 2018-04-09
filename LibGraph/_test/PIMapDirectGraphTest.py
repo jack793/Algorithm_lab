@@ -197,4 +197,4 @@ class TestPIDirectGraph(unittest.TestCase):
         g.add_arch(7, 6, 0, 100)
 
         res = g.ccrp({4}, {1}, 100)
-        print(res)
+        self.assertEqual(res, ([[4, 7, 6, 1], [4, 3, 2, 1]], [100, 100], [7, 17]))
