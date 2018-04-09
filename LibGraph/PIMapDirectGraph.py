@@ -119,6 +119,8 @@ class PIMapDirectGraph:
             graph.add_arch(super_node_index, node, 0, inf)
 
         plan = []
+        capacities = []
+        times = []
         while True:
             distances, predecessors = self.get_sssp_dijkstra(super_node_index)
 
@@ -126,6 +128,8 @@ class PIMapDirectGraph:
                 min_time_destination = min(destination_nodes, key=lambda v: distances[v])
             except KeyError:
                 break
+
+            times.append(distances[min_time_destination])
 
             path = [min_time_destination]
             while True:
@@ -147,6 +151,8 @@ class PIMapDirectGraph:
                 except KeyError:
                     pass
 
+            capacities.append(min_cap)
+
             for i in path:
                 try:
                     graph._capacity[predecessors.get(i)][i] = graph._capacity[predecessors.get(i)][i] - min_cap
@@ -158,4 +164,4 @@ class PIMapDirectGraph:
             path.remove(super_node_index)
             path = list(reversed(path))
             plan.append(path)
-        return plan
+        return plan, capacities, times
