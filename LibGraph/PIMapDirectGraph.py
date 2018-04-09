@@ -155,4 +155,7 @@ class PIMapDirectGraph:
                 except KeyError:
                     pass
 
+            path.remove(super_node_index)
+            path = list(reversed(path))
             plan.append(path)
+        return plan
