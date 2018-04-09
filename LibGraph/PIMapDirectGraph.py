@@ -1,6 +1,9 @@
 import heapq
 from collections import defaultdict
+from copy import copy
 from math import inf
+
+from numpy import Inf
 
 from LibGraph.PIDirectGraph import PIDirectGraph
 
@@ -38,8 +41,8 @@ class PIMapDirectGraph:
             raise KeyError("Capacity already set for the arch")
 
     def remove_arch(self, node_from, node_to):
-        self._time[node_from].remove(node_to)
-        self._capacity[node_from].remove(node_to)
+        self._time[node_from].pop(node_to)
+        self._capacity[node_from].pop(node_to)
         self._graph.remove_arch(node_from, node_to)
 
     def add_node(self, node):
@@ -53,6 +56,30 @@ class PIMapDirectGraph:
         for node_from in self._time:
             self._time[node_from].pop(node)
         self._graph.remove_node(node)
+
+    def get_node_out_degree(self, node):
+        return self._graph.get_node_out_degree(node)
+
+    def get_node_in_degree(self, node):
+        return self._graph.get_node_out_degree(node)
+
+    def get_node_degree(self, node):
+        return self._graph.get_node_degree(node)
+
+    def get_adj_list(self, node):
+        return self._graph.get_adj_list(node)
+
+    def get_in_adj_list(self, node):
+        return self._graph.get_in_adj_list(node)
+
+    def get_out_adj_list(self, node):
+        return self._graph.get_out_adj_list(node)
+
+    def get_bfs_path_from_node(self, node):
+        return self._graph.get_bfs_path_from_node(node)
+
+    def get_dfs_path_from_node(self, node):
+        return self._graph.get_dfs_path_from_node(node)
 
     def get_sssp_dijkstra(self, source_node: object) -> (set(), dict()):
         """
@@ -84,50 +111,48 @@ class PIMapDirectGraph:
 
         return distances, predecessors
 
-    def ccrp(self, source_nodes: set(), destination_nodes: set()):
-        super_node_index = max(self.get_node_list()) + 1
-
+    def ccrp(self, source_nodes: set(), destination_nodes: set(), vehicles: int):
+        graph = copy(self)
+        super_node_index = max(graph.get_node_list()) + 1
         self.add_node(super_node_index)  # add super_source to node_list
+        for node in source_nodes:
+            graph.add_arch(super_node_index, node, 0, inf)
 
-        for i in source_nodes:
-            self.add_arch(super_node_index, source_nodes[i], 0, inf)
+        plan = []
+        while True:
+            distances, predecessors = self.get_sssp_dijkstra(super_node_index)
 
-        plan = set()
-        distances, predecessors = self.get_sssp_dijkstra(super_node_index)
-
-        for d in destination_nodes:
-            path = []
             try:
-                prec = d
-                while prec is not None:
-                    path.append(prec)
-                    prec = predecessors[prec]
-                    if prec in source_nodes:
-                        plan.add(reversed(path))
-                        break
+                min_time_destination = min(destination_nodes, key=lambda v: distances[v])
             except KeyError:
-                continue
+                break
 
-    def get_node_out_degree(self, node):
-        return self._graph.get_node_out_degree(node)
+            path = [min_time_destination]
+            while True:
+                last = path[-1]
+                p = predecessors.get(last)
+                if p is not None:
+                    path.append(p)
+                elif last is not super_node_index:
+                    path.clear()
+                    break
+                else:
+                    break
 
-    def get_node_in_degree(self, node):
-        return self._graph.get_node_out_degree(node)
+            min_cap = inf
+            for i in path:
+                try:
+                    if min_cap > graph._capacity[predecessors.get(i)][i]:
+                        min_cap = graph._capacity[predecessors.get(i)][i]
+                except KeyError:
+                    pass
 
-    def get_node_degree(self, node):
-        return self._graph.get_node_degree(node)
+            for i in path:
+                try:
+                    graph._capacity[predecessors.get(i)][i] = graph._capacity[predecessors.get(i)][i] - min_cap
+                    if graph._capacity[predecessors.get(i)][i] is 0:
+                        graph.remove_arch(predecessors.get(i), i)
+                except KeyError:
+                    pass
 
-    def get_adj_list(self, node):
-        return self._graph.get_adj_list(node)
-
-    def get_in_adj_list(self, node):
-        return self._graph.get_in_adj_list(node)
-
-    def get_out_adj_list(self, node):
-        return self._graph.get_out_adj_list(node)
-
-    def get_bfs_path_from_node(self, node):
-        return self._graph.get_bfs_path_from_node(node)
-
-    def get_dfs_path_from_node(self, node):
-        return self._graph.get_dfs_path_from_node(node)
+            plan.append(path)
