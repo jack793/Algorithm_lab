@@ -113,7 +113,7 @@ class PIMapDirectGraph:
 
     def ccrp(self, source_nodes: set(), destination_nodes: set()):
         graph = copy(self)
-        super_node_index = max(graph.get_node_list()) + 1
+        super_node_index = int(max(graph.get_node_list())) + 1
         self.add_node(super_node_index)  # add super_source to node_list
         for node in source_nodes:
             graph.add_arch(super_node_index, node, 0, inf)

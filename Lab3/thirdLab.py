@@ -26,7 +26,7 @@ def read_graph():
         (a, b, c, d) = line.split()
         if a != b:
             try:
-                r.add_arch(a, b, float(c) / speed_limits[int(d) - 1], capacity_limits[int(d) - 1])
+                r.add_arch(int(a), int(b), float(c) / speed_limits[int(d) - 1], capacity_limits[int(d) - 1])
             except KeyError:
                 pass
 
@@ -34,8 +34,7 @@ def read_graph():
 
 
 g = read_graph()
-plan, capacities, times = g.ccrp({3718987342, 915248218, 65286004},
-                                 {261510687, 3522821903, 65319958, 65325408, 65295403, 258913493})
+plan, capacities, times = g.ccrp({3718987342, 915248218, 65286004}, {261510687, 3522821903, 65319958, 65325408, 65295403, 258913493})
 
 cap = capacities
 
