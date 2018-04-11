@@ -81,7 +81,7 @@ class PIMapDirectGraph:
     def get_dfs_path_from_node(self, node):
         return self._graph.get_dfs_path_from_node(node)
 
-    def get_sssp_dijkstra(self, source_node: object) -> (set(), dict()):
+    def get_sssp_dijkstra(self, source_node) -> (set(), dict()):
         """
         Find the shortest predecessors from a source node to any other accessible node :param source_node: Node from
         which start the search :return tuple containing the set of distances of the nodes from the source and a
@@ -111,7 +111,7 @@ class PIMapDirectGraph:
 
         return distances, predecessors
 
-    def ccrp(self, source_nodes: set(), destination_nodes: set(), vehicles: int):
+    def ccrp(self, source_nodes: set(), destination_nodes: set()):
         graph = copy(self)
         super_node_index = max(graph.get_node_list()) + 1
         self.add_node(super_node_index)  # add super_source to node_list

@@ -10,6 +10,7 @@
 # percorrenza. Il grafico deve mostrare come cresce la capacità ed il tempo di percorrenza al crescere del numero di
 # percorsi inseriti nel piano dall'algoritmo.
 from LibGraph.PIMapDirectGraph import PIMapDirectGraph
+from matplotlib import pyplot as plt
 
 
 def read_graph():
@@ -33,7 +34,19 @@ def read_graph():
 
 
 g = read_graph()
-print(g.get_sssp_dijkstra(min(g.get_node_list())))
+plan, capacities, times = g.ccrp({3718987342, 915248218, 65286004},
+                                 {261510687, 3522821903, 65319958, 65325408, 65295403, 258913493})
+
+cap = capacities
+
+for i in range(1,len(cap)):
+    cap[i] += cap[i-1]
+
+plt.title("Piano d'Evaquazione")
+plt.xlabel("Capacità totale")
+plt.ylabel("Tempo di percorrenza del Piano")
+plt.plot(cap, times, "b")
+plt.show()
 
 print("FINE")
 
