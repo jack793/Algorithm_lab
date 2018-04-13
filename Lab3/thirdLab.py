@@ -9,8 +9,9 @@
 # l'andamento dell'algoritmo in un grafico a linee dove l'asse x corrisponde alle capacità e l'asse y al tempo di
 # percorrenza. Il grafico deve mostrare come cresce la capacità ed il tempo di percorrenza al crescere del numero di
 # percorsi inseriti nel piano dall'algoritmo.
-from LibGraph.PIMapDirectGraph import PIMapDirectGraph
 from matplotlib import pyplot as plt
+
+from LibGraph.PIMapDirectGraph import PIMapDirectGraph
 
 input_file = open("SFroad.txt", "r")
 for _ in range(1):
@@ -30,6 +31,8 @@ for line in input_file:
 
 plan, capacities, times = g.ccrp({3718987342, 915248218, 65286004},
                                  {261510687, 3522821903, 65319958, 65325408, 65295403, 258913493})
+
+print(plan, capacities, times)
 
 cap = capacities
 

@@ -90,6 +90,7 @@ class PIMapDirectGraph:
         predecessors = defaultdict()
         heap = [(0, source_node, None)]
         while heap:
+            print(len(heap))
             path_len, v, pred_node = heappop(heap)
             if distances.get(v) is None:
                 distances[v] = path_len
@@ -118,13 +119,8 @@ class PIMapDirectGraph:
         capacities = []
         times = []
 
-        i = 0
-
         while True:
             distances, predecessors = self.get_sssp_dijkstra(v0)
-
-            i += 1
-            print(i)
 
             try:
                 min_time_destination = min(destination_nodes, key=lambda v: distances[v])
