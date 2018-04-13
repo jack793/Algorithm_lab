@@ -1,9 +1,7 @@
-import heapq
 from collections import defaultdict
 from copy import copy
+from heapq import heappush, heappop
 from math import inf
-
-from numpy import Inf
 
 from LibGraph.PIDirectGraph import PIDirectGraph
 
@@ -81,48 +79,52 @@ class PIMapDirectGraph:
     def get_dfs_path_from_node(self, node):
         return self._graph.get_dfs_path_from_node(node)
 
-    def get_sssp_dijkstra(self, source_node) -> (set(), dict()):
+    def get_sssp_dijkstra(self, source_node, ) -> (set(), dict()):
         """
         Find the shortest predecessors from a source node to any other accessible node :param source_node: Node from
         which start the search :return tuple containing the set of distances of the nodes from the source and a
         dictionary of the predecessors of each node visited
         """
 
-        distances = {source_node: 0}
-        heap = [(0, source_node)]
+        distances = defaultdict()
         predecessors = defaultdict()
-
-        nodes = set(self.get_node_list())
-
-        while nodes and heap:
-            current_weight, min_node = heapq.heappop(heap)
-
-            while min_node not in nodes:
-                current_weight, min_node = heapq.heappop(heap)
-
-            nodes.remove(min_node)
-
-            for v in self._graph.get_out_adj_list(min_node):
-                weight = current_weight + self._time[min_node][v]
-                if v not in distances or weight < distances[v]:
-                    distances[v] = weight
-                    heapq.heappush(heap, (weight, v))
-                    predecessors[v] = min_node
+        heap = [(0, source_node, None)]
+        while heap:
+            path_len, v, pred_node = heappop(heap)
+            if distances.get(v) is None:
+                distances[v] = path_len
+                predecessors[v] = pred_node
+                for w in self._graph.get_out_adj_list(v):
+                    edge_len = self._time[v][w]
+                    if distances.get(w) is None:
+                        heappush(heap, (path_len + edge_len, w, v))
 
         return distances, predecessors
 
     def ccrp(self, source_nodes: set(), destination_nodes: set()):
         graph = copy(self)
-        super_node_index = int(max(graph.get_node_list())) + 1
-        self.add_node(super_node_index)  # add super_source to node_list
+
+        # Find a valid super source
+        v0 = int(max(graph.get_node_list())) + 1
+
+        # Add super source to the graph
+        self.add_node(v0)
+
+        # Connect super source to the original sources
         for node in source_nodes:
-            graph.add_arch(super_node_index, node, 0, inf)
+            graph.add_arch(v0, node, 0, inf)
 
         plan = []
         capacities = []
         times = []
+
+        i = 0
+
         while True:
-            distances, predecessors = self.get_sssp_dijkstra(super_node_index)
+            distances, predecessors = self.get_sssp_dijkstra(v0)
+
+            i += 1
+            print(i)
 
             try:
                 min_time_destination = min(destination_nodes, key=lambda v: distances[v])
@@ -137,7 +139,7 @@ class PIMapDirectGraph:
                 p = predecessors.get(last)
                 if p is not None:
                     path.append(p)
-                elif last is not super_node_index:
+                elif last is not v0:
                     path.clear()
                     break
                 else:
@@ -161,7 +163,7 @@ class PIMapDirectGraph:
                 except KeyError:
                     pass
 
-            path.remove(super_node_index)
+            path.remove(v0)
             path = list(reversed(path))
             plan.append(path)
         return plan, capacities, times

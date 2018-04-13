@@ -12,34 +12,29 @@
 from LibGraph.PIMapDirectGraph import PIMapDirectGraph
 from matplotlib import pyplot as plt
 
+input_file = open("SFroad.txt", "r")
+for _ in range(1):
+    input_file.readline()
 
-def read_graph():
-    input_file = open("SFroad.txt", "r")
-    for i in range(1):
-        input_file.readline()
+g = PIMapDirectGraph()
+speed_limits = [30, 50, 50, 70, 70, 90]
+capacity_limits = [500, 750, 1000, 1500, 2000, 4000]
 
-    r = PIMapDirectGraph()
-    speed_limits = [30, 50, 50, 70, 70, 90]
-    capacity_limits = [500, 750, 1000, 1500, 2000, 4000]
+for line in input_file:
+    (a, b, c, d) = line.split()
+    if a != b:
+        try:
+            g.add_arch(int(a), int(b), float(c) / speed_limits[int(d) - 1], capacity_limits[int(d) - 1])
+        except KeyError:
+            pass
 
-    for line in input_file:
-        (a, b, c, d) = line.split()
-        if a != b:
-            try:
-                r.add_arch(int(a), int(b), float(c) / speed_limits[int(d) - 1], capacity_limits[int(d) - 1])
-            except KeyError:
-                pass
-
-    return r
-
-
-g = read_graph()
-plan, capacities, times = g.ccrp({3718987342, 915248218, 65286004}, {261510687, 3522821903, 65319958, 65325408, 65295403, 258913493})
+plan, capacities, times = g.ccrp({3718987342, 915248218, 65286004},
+                                 {261510687, 3522821903, 65319958, 65325408, 65295403, 258913493})
 
 cap = capacities
 
-for i in range(1,len(cap)):
-    cap[i] += cap[i-1]
+for i in range(1, len(cap)):
+    cap[i] += cap[i - 1]
 
 plt.title("Piano d'Evaquazione")
 plt.xlabel("Capacità totale")
