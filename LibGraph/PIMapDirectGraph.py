@@ -39,20 +39,41 @@ class PIMapDirectGraph:
             raise KeyError("Capacity already set for the arch")
 
     def remove_arch(self, node_from, node_to):
-        self._time[node_from].pop(node_to)
-        self._capacity[node_from].pop(node_to)
-        self._graph.remove_arch(node_from, node_to)
+        try:
+            self._time[node_from].pop(node_to)
+        except KeyError:
+            pass
+        try:
+            self._capacity[node_from].pop(node_to)
+        except KeyError:
+            pass
+        try:
+            self._graph.remove_arch(node_from, node_to)
+        except KeyError:
+            pass
 
     def add_node(self, node):
         self._graph.add_node(node)
 
     def remove_node(self, node):
-        self._capacity.pop(node)
-        self._time.pop(node)
+        try:
+            self._capacity.pop(node)
+        except KeyError:
+            pass
+        try:
+            self._time.pop(node)
+        except KeyError:
+            pass
         for node_from in self._capacity:
-            self._capacity[node_from].pop(node)
+            try:
+                self._capacity[node_from].pop(node)
+            except KeyError:
+                pass
         for node_from in self._time:
-            self._time[node_from].pop(node)
+            try:
+                self._time[node_from].pop(node)
+            except KeyError:
+                pass
         self._graph.remove_node(node)
 
     def get_node_out_degree(self, node):
@@ -81,8 +102,9 @@ class PIMapDirectGraph:
 
     def get_sssp_dijkstra(self, source_node, ) -> (set(), dict()):
         """
-        Find the shortest predecessors from a source node to any other accessible node :param source_node: Node from
-        which start the search :return tuple containing the set of distances of the nodes from the source and a
+        Find the shortest predecessors from a source node to any other accessible node
+        :param source_node: Node from which start the search
+        :return tuple containing the set of distances of the nodes from the source and a
         dictionary of the predecessors of each node visited
         """
 
@@ -90,7 +112,9 @@ class PIMapDirectGraph:
         predecessors = defaultdict()
         heap = [(0, source_node, None)]
         while heap:
-            print(len(heap))
+
+            print(len(heap))  # TODO: remove, just for "production"
+
             path_len, v, pred_node = heappop(heap)
             if distances.get(v) is None:
                 distances[v] = path_len
@@ -103,63 +127,153 @@ class PIMapDirectGraph:
         return distances, predecessors
 
     def ccrp(self, source_nodes: set(), destination_nodes: set()):
-        graph = copy(self)
+        """
+        Capacity Constrained Route Planner: this method finds the the best paths from a set of sources to a set of
+        destinations, choosing always the shortest path (time) and taking account of the capacity of each one.
+        :param source_nodes:  set of source nodes
+        :param destination_nodes: set of destination nodes
+        :return: set of paths
+        """
+        # graph = copy(self)
+        #
+        # # Find a valid super source
+        # v0 = int(max(graph.get_node_list())) + 1
+        #
+        # # Add super source to the graph
+        # self.add_node(v0)
+        #
+        # # Connect super source to the original sources
+        # for node in source_nodes:
+        #     graph.add_arch(v0, node, 0, inf)
+        #
+        # plan = []
+        # capacities = []
+        # times = []
+        #
+        # while True:
+        #     distances, predecessors = self.get_sssp_dijkstra(v0)
+        #
+        #     try:
+        #         min_time_destination = min(destination_nodes, key=lambda v: distances[v])
+        #     except KeyError:
+        #         break
+        #
+        #     times.append(distances[min_time_destination])
+        #
+        #     path = [min_time_destination]
+        #     while True:
+        #         last = path[-1]
+        #         p = predecessors.get(last)
+        #         if p is not None:
+        #             path.append(p)
+        #         elif last is not v0:
+        #             path.clear()
+        #             break
+        #         else:
+        #             break
+        #
+        #     min_cap = inf
+        #     for i in path:
+        #         try:
+        #             if min_cap > graph._capacity[predecessors.get(i)][i]:
+        #                 min_cap = graph._capacity[predecessors.get(i)][i]
+        #         except KeyError:
+        #             pass
+        #
+        #     capacities.append(min_cap)
+        #
+        #     for i in path:
+        #         try:
+        #             graph._capacity[predecessors.get(i)][i] = graph._capacity[predecessors.get(i)][i] - min_cap
+        #             if graph._capacity[predecessors.get(i)][i] is 0:
+        #                 graph.remove_arch(predecessors.get(i), i)
+        #         except KeyError:
+        #             pass
+        #
+        #     path.remove(v0)
+        #     path = list(reversed(path))
+        #     plan.append(path)
+        # return plan, capacities, times
 
-        # Find a valid super source
-        v0 = int(max(graph.get_node_list())) + 1
+        # Copy of the original graph
+        g = copy(self)
 
-        # Add super source to the graph
-        self.add_node(v0)
+        # Add super source node
+        super_source_node = max(g._graph.get_node_list()) + 1
+        g.add_node(super_source_node)
+        for source in source_nodes:
+            g.add_arch(super_source_node, source, 0, inf)
 
-        # Connect super source to the original sources
-        for node in source_nodes:
-            graph.add_arch(v0, node, 0, inf)
-
-        plan = []
-        capacities = []
-        times = []
+        # Create plan set
+        plan = list()
+        capacities = list()
+        times = list()
 
         while True:
-            distances, predecessors = self.get_sssp_dijkstra(v0)
+
+            distances, predecessors = g.get_sssp_dijkstra(super_source_node)
+            distances_destinations = filter(lambda k: k in destination_nodes, distances)
 
             try:
-                min_time_destination = min(destination_nodes, key=lambda v: distances[v])
-            except KeyError:
+                min_distance_node = min(distances_destinations, key=lambda k: distances.get(k))
+            except ValueError:
                 break
 
-            times.append(distances[min_time_destination])
+            # Add distance to the result
+            times.append(distances.get(min_distance_node))
 
-            path = [min_time_destination]
+            path = list()
+
+            # Populate the path
+            last_node = min_distance_node
             while True:
-                last = path[-1]
-                p = predecessors.get(last)
-                if p is not None:
-                    path.append(p)
-                elif last is not v0:
-                    path.clear()
-                    break
+                # Add the last node
+                path.append(last_node)
+
+                # If there are any predecessor nodes left, continue
+                if predecessors.get(last_node) is not None:
+                    last_node = predecessors.get(last_node)
                 else:
                     break
+            path = list(reversed(path[:-1]))
 
-            min_cap = inf
-            for i in path:
+            # Find least capacity in the path (bottleneck)
+            bottleneck = inf
+            for i in range(len(path)):
                 try:
-                    if min_cap > graph._capacity[predecessors.get(i)][i]:
-                        min_cap = graph._capacity[predecessors.get(i)][i]
+                    if bottleneck > g._capacity[path[i]][path[i + 1]]:
+                        bottleneck = g._capacity[path[i]][path[i + 1]]
                 except KeyError:
                     pass
 
-            capacities.append(min_cap)
+                # TODO: possible solution
+                except IndexError:
+                    pass
 
-            for i in path:
+            # Add bottleneck to the capacities result
+            capacities.append(bottleneck)
+
+            # Update capacity of the arches
+            for i in range(len(path)):
                 try:
-                    graph._capacity[predecessors.get(i)][i] = graph._capacity[predecessors.get(i)][i] - min_cap
-                    if graph._capacity[predecessors.get(i)][i] is 0:
-                        graph.remove_arch(predecessors.get(i), i)
+                    # Update arch capacity
+                    g._capacity[path[i]][path[i + 1]] -= bottleneck
+
+                    # Remove the arch if full capacity
+                    if g._capacity[path[i]][path[i + 1]] is 0:
+                        g.remove_arch(path[i], path[i + 1])
                 except KeyError:
                     pass
 
-            path.remove(v0)
-            path = list(reversed(path))
+                # TODO: possible solution
+                except IndexError:
+                    pass
+
+            # Remove node if all arches are gone
+            if len(g.get_in_adj_list(min_distance_node)) is 0:
+                g.remove_node(min_distance_node)
+
+            # Add path to the plan result
             plan.append(path)
+
         return plan, capacities, times
