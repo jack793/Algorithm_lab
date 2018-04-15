@@ -9,7 +9,6 @@
 # l'andamento dell'algoritmo in un grafico a linee dove l'asse x corrisponde alle capacità e l'asse y al tempo di
 # percorrenza. Il grafico deve mostrare come cresce la capacità ed il tempo di percorrenza al crescere del numero di
 # percorsi inseriti nel piano dall'algoritmo.
-from matplotlib import pyplot as plt
 
 from LibGraph.PIMapDirectGraph import PIMapDirectGraph
 
@@ -29,21 +28,22 @@ for line in input_file:
         except KeyError:
             pass
 
-plan, capacities, times = g.ccrp({3718987342, 915248218, 65286004},
-                                 {261510687, 3522821903, 65319958, 65325408, 65295403, 258913493})
+plan = g.ccrp({3718987342, 915248218, 65286004}, {261510687, 3522821903, 65319958, 65325408, 65295403, 258913493})
+# plan = g.ccrp({3718987342}, {261510687})
 
-print(plan, capacities, times)
+print(plan)
+print("Number of paths:", len(plan))
 
-cap = capacities
-
-for i in range(1, len(cap)):
-    cap[i] += cap[i - 1]
-
-plt.title("Piano d'Evaquazione")
-plt.xlabel("Capacità totale")
-plt.ylabel("Tempo di percorrenza del Piano")
-plt.plot(cap, times, "b")
-plt.show()
+# cap = capacities
+#
+# for i in range(1, len(cap)):
+#     cap[i] += cap[i - 1]
+#
+# plt.title("Piano d'Evaquazione")
+# plt.xlabel("Capacità totale")
+# plt.ylabel("Tempo di percorrenza del Piano")
+# plt.plot(cap, times, "b")
+# plt.show()
 
 print("FINE")
 

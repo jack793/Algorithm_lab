@@ -11,7 +11,8 @@ class PIGraph:
         try:
             self._nodeList.remove(node)
         except KeyError:
-            pass
+            raise Exception("Node not present")
+
         try:
             self._adjList.pop(node)
         except KeyError:

@@ -3,13 +3,13 @@ from copy import copy
 from heapq import heappush, heappop
 from math import inf
 
-from LibGraph.PIDirectGraph import PIDirectGraph
+from LibGraph.PIReverseDirectGraph import PIReversedDirectGraph
 
 
 class PIMapDirectGraph:
 
     def __init__(self):
-        self._graph = PIDirectGraph()
+        self._graph = PIReversedDirectGraph()
         self._time = dict()
         self._capacity = dict()
 
@@ -18,7 +18,12 @@ class PIMapDirectGraph:
 
     def get_arch_list(self):
         arch_list = self._graph.get_arch_list()
-        return set((a, b, self._time[a][b], self._capacity[a][b]) for a, b in arch_list)
+        res = set((a, b, self._time[a][b], self._capacity[a][b]) for a, b in arch_list)
+        return res
+
+    def get_reversed_arch_list(self):
+        reversed_arch_list = self._graph.get_reversed_arch_list()
+        return set((a, b, self._time[b][a], self._capacity[b][a]) for a, b in reversed_arch_list)
 
     def add_arch(self, node_from, node_to, time, capacity):
         self._graph.add_arch(node_from, node_to)
@@ -39,31 +44,18 @@ class PIMapDirectGraph:
             raise KeyError("Capacity already set for the arch")
 
     def remove_arch(self, node_from, node_to):
-        try:
-            self._time[node_from].pop(node_to)
-        except KeyError:
-            pass
-        try:
-            self._capacity[node_from].pop(node_to)
-        except KeyError:
-            pass
-        try:
-            self._graph.remove_arch(node_from, node_to)
-        except KeyError:
-            pass
+        self._graph.remove_arch(node_from, node_to)
+        self._time[node_from].pop(node_to)
+        self._capacity[node_from].pop(node_to)
 
     def add_node(self, node):
         self._graph.add_node(node)
 
     def remove_node(self, node):
-        try:
-            self._capacity.pop(node)
-        except KeyError:
-            pass
-        try:
-            self._time.pop(node)
-        except KeyError:
-            pass
+        self._graph.remove_node(node)
+        self._capacity.pop(node)
+        self._time.pop(node)
+
         for node_from in self._capacity:
             try:
                 self._capacity[node_from].pop(node)
@@ -74,13 +66,12 @@ class PIMapDirectGraph:
                 self._time[node_from].pop(node)
             except KeyError:
                 pass
-        self._graph.remove_node(node)
 
     def get_node_out_degree(self, node):
         return self._graph.get_node_out_degree(node)
 
     def get_node_in_degree(self, node):
-        return self._graph.get_node_out_degree(node)
+        return self._graph.get_node_in_degree(node)
 
     def get_node_degree(self, node):
         return self._graph.get_node_degree(node)
@@ -113,13 +104,14 @@ class PIMapDirectGraph:
         heap = [(0, source_node, None)]
         while heap:
 
-            print(len(heap))  # TODO: remove, just for "production"
+            # print(len(heap))  # TODO: remove, just for "production"
 
             path_len, v, pred_node = heappop(heap)
             if distances.get(v) is None:
                 distances[v] = path_len
                 predecessors[v] = pred_node
-                for w in self._graph.get_out_adj_list(v):
+                out_adj_v = self._graph.get_out_adj_list(v)
+                for w in out_adj_v:
                     edge_len = self._time[v][w]
                     if distances.get(w) is None:
                         heappush(heap, (path_len + edge_len, w, v))
@@ -132,7 +124,7 @@ class PIMapDirectGraph:
         destinations, choosing always the shortest path (time) and taking account of the capacity of each one.
         :param source_nodes:  set of source nodes
         :param destination_nodes: set of destination nodes
-        :return: set of paths
+        :return: list of tuples, each containing the a path, its capacity and the time needed
         """
         # graph = copy(self)
         #
@@ -206,26 +198,29 @@ class PIMapDirectGraph:
 
         # Create plan set
         plan = list()
-        capacities = list()
-        times = list()
 
-        while True:
+        for source in source_nodes:
+            if g.get_node_in_degree(source) is 0:
+                source_nodes.remove(source)
+
+        for destination in destination_nodes:
+            if g.get_node_in_degree(destination) is 0:
+                destination_nodes.remove(destination)
+
+        while destination_nodes and source_nodes:  # TODO: set to while True
 
             distances, predecessors = g.get_sssp_dijkstra(super_source_node)
-            distances_destinations = filter(lambda k: k in destination_nodes, distances)
+            distances_destinations = {k: v for k, v in distances.items() if k in destination_nodes}
 
             try:
-                min_distance_node = min(distances_destinations, key=lambda k: distances.get(k))
+                min_distance_destination = min(distances_destinations, key=lambda k: distances.get(k))
             except ValueError:
                 break
-
-            # Add distance to the result
-            times.append(distances.get(min_distance_node))
 
             path = list()
 
             # Populate the path
-            last_node = min_distance_node
+            last_node = min_distance_destination
             while True:
                 # Add the last node
                 path.append(last_node)
@@ -239,41 +234,29 @@ class PIMapDirectGraph:
 
             # Find least capacity in the path (bottleneck)
             bottleneck = inf
-            for i in range(len(path)):
-                try:
-                    if bottleneck > g._capacity[path[i]][path[i + 1]]:
-                        bottleneck = g._capacity[path[i]][path[i + 1]]
-                except KeyError:
-                    pass
-
-                # TODO: possible solution
-                except IndexError:
-                    pass
-
-            # Add bottleneck to the capacities result
-            capacities.append(bottleneck)
+            for i in range(len(path) - 1):
+                if bottleneck > g._capacity[path[i]][path[i + 1]]:
+                    bottleneck = g._capacity[path[i]][path[i + 1]]
 
             # Update capacity of the arches
-            for i in range(len(path)):
-                try:
-                    # Update arch capacity
-                    g._capacity[path[i]][path[i + 1]] -= bottleneck
+            for i in range(len(path) - 1):
 
-                    # Remove the arch if full capacity
-                    if g._capacity[path[i]][path[i + 1]] is 0:
-                        g.remove_arch(path[i], path[i + 1])
-                except KeyError:
-                    pass
+                # Update arch capacity
+                g._capacity[path[i]][path[i + 1]] -= bottleneck
 
-                # TODO: possible solution
-                except IndexError:
-                    pass
-
-            # Remove node if all arches are gone
-            if len(g.get_in_adj_list(min_distance_node)) is 0:
-                g.remove_node(min_distance_node)
+                # Remove the arch if full capacity
+                if g._capacity[path[i]][path[i + 1]] is 0:
+                    g.remove_arch(path[i], path[i + 1])
 
             # Add path to the plan result
-            plan.append(path)
+            plan.append((path, bottleneck, distances_destinations.get(min_distance_destination)))
+            print("PATH:", path)
+            print("LEN:", len(path))
+            print("CAPACITY:", bottleneck)
+            print("TIME:", distances[min_distance_destination])
 
-        return plan, capacities, times
+            source_nodes = {source for source in source_nodes if g.get_node_out_degree(source) > 0}
+            destination_nodes = {destination for destination in destination_nodes if
+                                 g.get_node_in_degree(destination) > 0}
+
+        return plan

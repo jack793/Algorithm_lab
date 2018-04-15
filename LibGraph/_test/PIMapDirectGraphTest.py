@@ -3,7 +3,6 @@ from math import inf
 
 import pytest
 
-from LibGraph.PIDirectGraph import PIDirectGraph
 from LibGraph.PIMapDirectGraph import PIMapDirectGraph
 
 
@@ -11,35 +10,38 @@ class TestPIDirectGraph(unittest.TestCase):
 
     def test_no_loops(self):
         with pytest.raises(Exception):
-            g = PIDirectGraph()
-            g.add_arch(1, 1)
+            g = PIMapDirectGraph()
+            g.add_arch(1, 1, 0, 0)
+
+    def test_no_node_exception(self):
+        with pytest.raises(Exception):
+            g = PIMapDirectGraph()
+            g.remove_node(2)
 
     def test_append_and_get(self):
-        g = PIDirectGraph()
-        g.add_arch(1, 2)
-        g.add_arch(1, 3)
-        g.add_arch(1, 3)
-        g.add_arch(3, 1)
-        g.add_arch(3, 2)
+        g = PIMapDirectGraph()
+        g.add_arch(1, 2, 0, 0)
+        g.add_arch(1, 3, 0, 0)
+        g.add_arch(3, 1, 0, 0)
+        g.add_arch(3, 2, 0, 0)
 
         g.add_node(4)
 
         self.assertSetEqual(g.get_node_list(), {1, 2, 3, 4})
-        self.assertSetEqual(g.get_arch_list(), {(1, 2), (1, 3), (3, 1), (3, 2)})
-        self.assertSetEqual(g.get_reversed_arch_list(), {(1, 3), (3, 1), (2, 3), (2, 1)})
+        self.assertSetEqual(g.get_arch_list(), {(1, 2, 0, 0), (1, 3, 0, 0), (3, 1, 0, 0), (3, 2, 0, 0)})
+        self.assertSetEqual(g.get_reversed_arch_list(), {(1, 3, 0, 0), (3, 1, 0, 0), (2, 3, 0, 0), (2, 1, 0, 0)})
 
         g.remove_arch(1, 2)
 
         self.assertSetEqual(g.get_node_list(), {1, 2, 3, 4})
-        self.assertSetEqual(g.get_arch_list(), {(3, 2), (1, 3), (3, 1)})
-        self.assertSetEqual(g.get_reversed_arch_list(), {(1, 3), (3, 1), (2, 3)})
+        self.assertSetEqual(g.get_arch_list(), {(3, 2, 0, 0), (1, 3, 0, 0), (3, 1, 0, 0)})
+        self.assertSetEqual(g.get_reversed_arch_list(), {(1, 3, 0, 0), (3, 1, 0, 0), (2, 3, 0, 0)})
 
         g.remove_node(1)
-        g.remove_node(5)
 
         self.assertSetEqual(g.get_node_list(), {2, 3, 4})
-        self.assertSetEqual(g.get_arch_list(), {(3, 2)})
-        self.assertSetEqual(g.get_reversed_arch_list(), {(2, 3)})
+        self.assertSetEqual(g.get_arch_list(), {(3, 2, 0, 0)})
+        self.assertSetEqual(g.get_reversed_arch_list(), {(2, 3, 0, 0)})
 
     def test_in_out_adj_list(self):
         g = PIMapDirectGraph()
@@ -71,9 +73,11 @@ class TestPIDirectGraph(unittest.TestCase):
 
         self.assertEqual(g.get_node_in_degree(1), 3)
         self.assertEqual(g.get_node_in_degree(4), 1)
+        self.assertEqual(g.get_node_in_degree(8), 0)
 
-        self.assertEqual(g.get_node_out_degree(1), 3)
+        self.assertEqual(g.get_node_out_degree(1), 4)
         self.assertEqual(g.get_node_out_degree(4), 1)
+        self.assertEqual(g.get_node_out_degree(8), 0)
 
     def test_bfs(self):
         g = PIMapDirectGraph()
@@ -204,4 +208,4 @@ class TestPIDirectGraph(unittest.TestCase):
         g.add_arch(7, 6, 0, 100)
 
         res = g.ccrp({4}, {1})
-        self.assertEqual(res, ([[4, 7, 6, 1], [4, 3, 2, 1]], [100, 100], [7, 17]))
+        self.assertEqual(res, [([4, 7, 6, 1], 100, 7), ([4, 3, 2, 1], 100, 17)])
