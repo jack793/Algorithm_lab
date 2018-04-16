@@ -126,66 +126,6 @@ class PIMapDirectGraph:
         :param destination_nodes: set of destination nodes
         :return: list of tuples, each containing the a path, its capacity and the time needed
         """
-        # graph = copy(self)
-        #
-        # # Find a valid super source
-        # v0 = int(max(graph.get_node_list())) + 1
-        #
-        # # Add super source to the graph
-        # self.add_node(v0)
-        #
-        # # Connect super source to the original sources
-        # for node in source_nodes:
-        #     graph.add_arch(v0, node, 0, inf)
-        #
-        # plan = []
-        # capacities = []
-        # times = []
-        #
-        # while True:
-        #     distances, predecessors = self.get_sssp_dijkstra(v0)
-        #
-        #     try:
-        #         min_time_destination = min(destination_nodes, key=lambda v: distances[v])
-        #     except KeyError:
-        #         break
-        #
-        #     times.append(distances[min_time_destination])
-        #
-        #     path = [min_time_destination]
-        #     while True:
-        #         last = path[-1]
-        #         p = predecessors.get(last)
-        #         if p is not None:
-        #             path.append(p)
-        #         elif last is not v0:
-        #             path.clear()
-        #             break
-        #         else:
-        #             break
-        #
-        #     min_cap = inf
-        #     for i in path:
-        #         try:
-        #             if min_cap > graph._capacity[predecessors.get(i)][i]:
-        #                 min_cap = graph._capacity[predecessors.get(i)][i]
-        #         except KeyError:
-        #             pass
-        #
-        #     capacities.append(min_cap)
-        #
-        #     for i in path:
-        #         try:
-        #             graph._capacity[predecessors.get(i)][i] = graph._capacity[predecessors.get(i)][i] - min_cap
-        #             if graph._capacity[predecessors.get(i)][i] is 0:
-        #                 graph.remove_arch(predecessors.get(i), i)
-        #         except KeyError:
-        #             pass
-        #
-        #     path.remove(v0)
-        #     path = list(reversed(path))
-        #     plan.append(path)
-        # return plan, capacities, times
 
         # Copy of the original graph
         g = copy(self)
