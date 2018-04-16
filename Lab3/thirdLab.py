@@ -11,6 +11,7 @@
 # percorsi inseriti nel piano dall'algoritmo.
 
 from LibGraph.PIMapDirectGraph import PIMapDirectGraph
+from matplotlib import pyplot as plt
 
 input_file = open("SFroad.txt", "r")
 for _ in range(1):
@@ -29,10 +30,19 @@ for line in input_file:
             pass
 
 plan = g.ccrp({3718987342, 915248218, 65286004}, {261510687, 3522821903, 65319958, 65325408, 65295403, 258913493})
-# plan = g.ccrp({3718987342}, {261510687})
 
 print(plan)
 print("Number of paths:", len(plan))
+
+# Calculate total capacity of the plan
+plan_capacity = 0
+for path, cap, time in plan:
+    plan_capacity += cap
+
+# Calculate travel time of the plan
+_, _, travel_time = plan[-1]
+
+print(plan_capacity, travel_time)
 
 # cap = capacities
 #

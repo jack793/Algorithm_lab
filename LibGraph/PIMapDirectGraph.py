@@ -190,10 +190,6 @@ class PIMapDirectGraph:
 
             # Add path to the plan result
             plan.append((path, bottleneck, distances_destinations.get(min_distance_destination)))
-            print("PATH:", path)
-            print("LEN:", len(path))
-            print("CAPACITY:", bottleneck)
-            print("TIME:", distances[min_distance_destination])
 
             source_nodes = {source for source in source_nodes if g.get_node_out_degree(source) > 0}
             destination_nodes = {destination for destination in destination_nodes if
