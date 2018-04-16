@@ -1,3 +1,5 @@
+from LibGraph.Node import Node
+
 class PIGraph:
 
     def __init__(self):
