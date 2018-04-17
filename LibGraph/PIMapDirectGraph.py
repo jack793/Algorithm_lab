@@ -1,5 +1,5 @@
 from collections import defaultdict
-from copy import copy
+from copy import deepcopy
 from heapq import heappush, heappop
 from math import inf
 
@@ -103,9 +103,6 @@ class PIMapDirectGraph:
         predecessors = defaultdict()
         heap = [(0, source_node, None)]
         while heap:
-
-            # print(len(heap))  # TODO: remove, just for "production"
-
             path_len, v, pred_node = heappop(heap)
             if distances.get(v) is None:
                 distances[v] = path_len
@@ -128,7 +125,7 @@ class PIMapDirectGraph:
         """
 
         # Copy of the original graph
-        g = copy(self)
+        g = deepcopy(self)
 
         # Add super source node
         super_source_node = max(g._graph.get_node_list()) + 1
@@ -147,7 +144,7 @@ class PIMapDirectGraph:
             if g.get_node_in_degree(destination) is 0:
                 destination_nodes.remove(destination)
 
-        while destination_nodes and source_nodes:  # TODO: set to while True
+        while destination_nodes and source_nodes:
 
             distances, predecessors = g.get_sssp_dijkstra(super_source_node)
             distances_destinations = {k: v for k, v in distances.items() if k in destination_nodes}
@@ -202,4 +199,3 @@ class PIMapDirectGraph:
 
     def get_capacity(self, a, b):
         return self._capacity[a][b]
-
