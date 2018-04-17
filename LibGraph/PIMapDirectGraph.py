@@ -196,3 +196,10 @@ class PIMapDirectGraph:
                                  g.get_node_in_degree(destination) > 0}
 
         return plan
+
+    def get_weight(self, a, b):
+        return self._time[a][b]
+
+    def get_capacity(self, a, b):
+        return self._capacity[a][b]
+
