@@ -72,7 +72,7 @@ plt.title("Piano d'Evaquazione")
 plt.xlabel("Capacità totale")
 plt.ylabel("Tempo di percorrenza del Piano")
 plt.plot(capacities, [t for p, c, t in plan], "b")
-# plt.show()
+plt.show()
 
 # 2 Qual'è la capacità massima di veicoli che possono entrare in città dai tre nodi sorgente? Qual'è la capacità
 # massima di veicoli che possono giungere contemporaneamente ai sei ospedali di destinazione? Confrontate questi due

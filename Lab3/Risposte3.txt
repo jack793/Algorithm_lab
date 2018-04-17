@@ -1,0 +1,25 @@
+Francesco Fasolato,
+Giacomo Zecchin,
+Filippo Berto
+
+DOMANDA 2:
+
+La capacità massima di veicoli che possono entrare in città dai tre nodi sorgente è:
+Source nodes capacity: 20000
+La capacità massima di veicoli che possono giungere contemporaneamente ai sei ospedali di destinazione è:
+Destination nodes capacity: 12000
+La capacità massima del piano che abbiamo trovato con CCRP:
+Plan capacity: 10500
+
+Questi valori ci suggeriscono che, presa un’ora come unità temporale, sono presenti 20000 veicoli alla partenza (alle tre sorgenti) e gli ospedali (le sei destinazioni) sono raggiungibili da strade aventi la capacità di 12000 veicoli, mentre solo 10500 veicoli raggiungono effettivamente le destinazioni attraverso i 20 percorsi trovati dopo un’ora. Quindi i colli di bottiglia saranno necessariamente delle strade interne al percorso. Di seguito elenchiamo tutti i colli di bottiglia (gli archi con capacità minima per ogni percorso) seguiti dalla propria capacità:
+
+Bottlenecks: [((5108177063, 65283935), 1500), ((262263366, 5022036464), 1000), ((258911593, 4783986990), 1000), ((258911618, 258911619), 1500), ((262078986, 65341510), 750), ((65319966, 258758547), 1500), ((4061762661, 65325363), 750), ((4178174287, 5012209349), 1000), ((65303689, 4177105008), 750), ((65352253, 65297371), 500), ((65317986, 259138852), 500), ((65281218, 267455477), 1500), ((340160946, 65324431), 1500), ((65313357, 65313359), 500), ((65352257, 4023155492), 750), ((65337071, 65307304), 500), ((65337071, 65307304), 500), ((258968250, 65318663), 750), ((65307463, 65297381), 500), ((65336671, 65295379), 500)]
+
+DOMANDA 3:
+
+Per la coda di priorità nell'algoritmo di Dijkstra per la ricerca dei cammini minimi abbiamo utilizzato una lista di nodi, richiamando i metodi heappop() e heappush() della libreria heapqueue su essa. Complessità delle operazioni di base all’interno dell’algoritmo di Dijkstra:
+- Creazione della coda: O(n)
+- Estrazione del minimo: O(log(n))
+- Decremento della chiave: O(n)
+
+Dove n = |V|.
