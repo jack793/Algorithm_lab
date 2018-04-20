@@ -2,11 +2,11 @@
 # 2. Euristiche costruttive: scegliete una fra le euristiche costruttive viste a lezione ed implementatela: Nearest Neighbour, Closest Insertion, Farthest Insertion, Random Insertion, Cheapest Insertion.
 # 3. Algoritmi 2-approssimati: implementate l'algoritmo 2-approssimato basato sull'albero di copertura minimo.
 
+from math import *
+
 from LibGraph.PIMapIndirectGraph import PIMapIndirectGraph
 
-from math import cos, acos
-
-input_file = open("Data/burma14.tsp", "r")
+input_file = open("Data/berlin52.tsp", "r")
 for _ in range(4):
     input_file.readline()
 
@@ -20,12 +20,17 @@ line = input_file.readline()
 
 # VOGLIO LEGGERE LA QUINTA RIGA DEL FILE DI INPUT E CAPIRE SE IL VALORE è GEO O EUC_2D
 if str(y) == "GEO":
-    for _ in range(3):
-        input_file.readline()
+
+    while True:
+        line = input_file.readline()
+        word = line.split()
+        if str(word[0]) == "NODE_COORD_SECTION":
+            break
 
     for line in input_file:  # Le righe restanti dalla 9 a EOF
         try:
             (a, b, c) = line.split()
+            print(a)
 
             # CONVERSIONI
             a = int(a)
@@ -67,9 +72,44 @@ if str(y) == "GEO":
                 except KeyError:
                     pass
 
-    # print(set(g.get_arch_list()))
+# print(set(g.get_arch_list()))
 
-    g.held_karp(0, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13))
+else:
+
+    while True:
+        line = input_file.readline()
+        word = line.split()
+        if str(word[0]) == "NODE_COORD_SECTION":
+            break
+
+    for line in input_file:  # Le righe restanti dalla 9 a EOF
+        try:
+            (a, b, c) = line.split()
+            print(a)
+
+            # CONVERSIONI
+            a = int(a)
+            b = float(b)
+            c = float(c)
+
+            nodes[a] = (b, c)
+
+        except ValueError:
+            pass
+
+    # INSERIMENTO DEGLI ARCHI
+    for i in nodes:
+        for j in nodes:
+            if i is not j:  # EVITO DI INSERIRE ARCHI DA UN NODO A SE STESSO
+
+                x, y = nodes[i]
+                w, z = nodes[j]
+
+                dist = sqrt(pow((w - x), 2) + pow((z - y), 2))
+
+                g.add_arch(nodes[i], nodes[j], dist)
+
+print(len(set(g.get_arch_list())))
 
 # plt.title("Piano d'Evaquazione")
 # plt.xlabel("Capacità totale")
