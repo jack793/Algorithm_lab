@@ -23,7 +23,7 @@ if str(y) == "GEO":
     for _ in range(3):
         input_file.readline()
 
-    for line in input_file: #Le righe restanti dalla 9 a EOF
+    for line in input_file:  # Le righe restanti dalla 9 a EOF
         try:
             (a, b, c) = line.split()
 
@@ -67,10 +67,9 @@ if str(y) == "GEO":
                 except KeyError:
                     pass
 
-    #print(set(g.get_arch_list()))
+    # print(set(g.get_arch_list()))
 
-
-
+    g.held_karp(0, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13))
 
 # plt.title("Piano d'Evaquazione")
 # plt.xlabel("Capacità totale")
