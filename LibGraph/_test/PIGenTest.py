@@ -19,4 +19,3 @@ class TestPIGen(unittest.TestCase):
     def test_upa_generation(self):
         g = PIGen.gen_indirect_graph_upa(2, 4)
         print(g.get_arch_list())
-

@@ -10,7 +10,7 @@ class PIIndirectGraph(PIGraph):
         super().add_arch(node_a, node_b)
         super().add_arch(node_b, node_a)
 
-    def get_arch_list(self):
+    def get_arch_list(self) -> set():
         super().get_arch_list()
         r = set()
         for b in self._adjList:

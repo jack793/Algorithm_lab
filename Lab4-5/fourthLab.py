@@ -2,55 +2,74 @@
 # 2. Euristiche costruttive: scegliete una fra le euristiche costruttive viste a lezione ed implementatela: Nearest Neighbour, Closest Insertion, Farthest Insertion, Random Insertion, Cheapest Insertion.
 # 3. Algoritmi 2-approssimati: implementate l'algoritmo 2-approssimato basato sull'albero di copertura minimo.
 
-from LibGraph.PIIndirectGraph import PIIndirectGraph
+from LibGraph.PIMapIndirectGraph import PIMapIndirectGraph
 
-input_file = open("burma14.tsp", "r")
-for _ in range(1):
+from math import cos, acos
+
+input_file = open("Data/burma14.tsp", "r")
+for _ in range(4):
     input_file.readline()
 
-g = PIIndirectGraph()
+g = PIMapIndirectGraph()
 PI = 3.141592
 RRR = 6378.388
 nodes = dict()
 
+line = input_file.readline()
+(x, y) = line.split()
+
 # VOGLIO LEGGERE LA QUINTA RIGA DEL FILE DI INPUT E CAPIRE SE IL VALORE è GEO O EUC_2D
-if ... is "GEO":
+if str(y) == "GEO":
+    for _ in range(3):
+        input_file.readline()
+
     for line in input_file: #Le righe restanti dalla 9 a EOF
-    (a, b, c) = line.split()
+        try:
+            (a, b, c) = line.split()
 
-    # CONVERSIONI
-    a = int(a)
-    b = float(b)
-    c = float(c)
+            # CONVERSIONI
+            a = int(a)
+            b = float(b)
+            c = float(c)
 
-    # LATITUDINE IN RADIANTI
-    degb = int(b)
-    minb = b - degb
-    radb = PI * (degb + 5.0 * minb / 3.0) / 180.0
+            # LATITUDINE IN RADIANTI
+            degb = int(b)
+            minb = b - degb
+            radb = PI * (degb + 5.0 * minb / 3.0) / 180.0
 
-    # LONGITUDINE IN RADIANTI
-    degc = int(c)
-    minc = c - degc
-    radc = PI * (degc + 5.0 * minc / 3.0) / 180.0
+            # LONGITUDINE IN RADIANTI
+            degc = int(c)
+            minc = c - degc
+            radc = PI * (degc + 5.0 * minc / 3.0) / 180.0
 
-    # INSERIMENTO DI UN NUOVO NODO IN NODES
-    nodes[a] = Node(radb, radc)
+            # INSERIMENTO DI UN NUOVO NODO IN NODES
+            nodes[a] = (radb, radc)
+
+        except ValueError:
+            pass
 
     # CALCOLO E INSERIMENTO DEGLI ARCHI
     for i in nodes:
         for j in nodes:
-            if i is not j: # EVITO DI INSERIRE ARCHI DA UN NODO A SE STESSO
-                # MANCANO LE FUNZIONI COS E ACOS CHE PENSO SIANO DEFINITE DIVERSAMENTE IN MATH
-                q1 = cos(nodes[i].gety() - nodes[j].gety())
-                q2 = cos(nodes[i].getx() - nodes[j].getx())
-                q3 = cos(nodes[i].getx() + nodes[j].getx())
+            if i is not j:  # EVITO DI INSERIRE ARCHI DA UN NODO A SE STESSO
+                x, y = nodes[i]
+                w, z = nodes[j]
+
+                q1 = cos(y - z)
+                q2 = cos(x - w)
+                q3 = cos(x + w)
 
                 dij = int(RRR * acos(0.5 * ((1.0 + q1) * q2 - (1.0 - q1) * q3)) + 1.0)
 
                 try:
-                    g.add_arch(nodes[i], nodes[j], dij) # BISOGNA AGGIUNGERE IL CAMPO PESO(DISTANZA) IN PIINDIRECTGRAPH
+                    g.add_arch(nodes[i], nodes[j], dij)
+
                 except KeyError:
                     pass
+
+    #print(set(g.get_arch_list()))
+
+
 
 
 # plt.title("Piano d'Evaquazione")
