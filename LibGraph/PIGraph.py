@@ -49,7 +49,7 @@ class PIGraph:
             pass
 
         try:
-            self._adjList[node_to].remove(node_from)
+            self._adjList[node_from].remove(node_to)
         except KeyError:
             pass
 

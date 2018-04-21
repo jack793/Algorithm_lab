@@ -1,5 +1,7 @@
 from LibGraph.PIIndirectGraph import PIIndirectGraph
 
+from math import inf
+
 from copy import deepcopy
 
 
@@ -45,14 +47,14 @@ class PIMapIndirectGraph:
         elif self._time[({v, s})] is not None:
             return self._time[({v, s})]
         else:
-            min_dist = float('inf')
+            min_dist = float(inf)
             min_prec = None
             S1 = tuple([u for u in s if u != v])
             for u in S1:
                 dist = self.held_karp(u, S1)  # recursive call
                 print("Dist:", dist)
-                print("currently arch:", graph.get_adj_matrix(u, v))
-                print("compare:", dist + graph.get_adj_matrix(u, v), min_dist)
+                #print("currently arch:", self._get_adj_matrix(u, v))
+                #print("compare:", dist + self._get_adj_matrix(u, v), min_dist)
                 if dist + self._time[({u, v})] < min_dist:  # update
                     min_dist = dist + self._time[({u, v})]
                     min_prec = u

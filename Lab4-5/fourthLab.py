@@ -109,7 +109,7 @@ else:
 
                 g.add_arch(nodes[i], nodes[j], dist)
 
-print(len(set(g.get_arch_list())))
+#print(set(g.get_arch_list()))
 
 # plt.title("Piano d'Evaquazione")
 # plt.xlabel("Capacità totale")
