@@ -105,7 +105,7 @@ else:
                 useless1, x, y = nodes[i]
                 useless2, w, z = nodes[j]
 
-                dist = sqrt(pow((w - x), 2) + pow((z - y), 2))
+                dist = int(sqrt(pow((w - x), 2) + pow((z - y), 2)))
 
                 g.add_arch(nodes[i], nodes[j], dist)
 
@@ -115,7 +115,7 @@ d = dict()
 pred = dict()
 
 
-g.held_karp(nodes[1], frozenset(g.get_node_list()), d, pred)
+g.held_karp(nodes[1], frozenset(g.get_node_list()), nodes[1], d, pred)
 
 # plt.title("Piano d'Evaquazione")
 # plt.xlabel("Capacità totale")
