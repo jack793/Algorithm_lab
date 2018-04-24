@@ -12,10 +12,10 @@ class TestPIMapIndirectGraph(unittest.TestCase):
         graph.add_arch((4, 1), (8, 3), 7)
         graph.add_arch((4, 8), (6, 2), 3)
 
-        print(graph.get_arch_list())
-
-        self.assertEqual(frozenset({((4, 1), (8, 3), 7), ((5, 7), (6, 2), 3), ((4, 8), (6, 2), 3)}), graph.get_arch_list())
+        self.assertEqual(
+            {(frozenset({(6, 2), (5, 7)}), 3), (frozenset({(6, 2), (4, 8)}), 3), (frozenset({(8, 3), (4, 1)}), 7)}
+            , graph.get_arch_list())
 
         graph.remove_arch((5, 7), (6, 2))
 
-        print(graph.get_arch_list())
+        self.assertEqual({(frozenset({(6, 2), (4, 8)}), 3), (frozenset({(8, 3), (4, 1)}), 7)}, graph.get_arch_list())
