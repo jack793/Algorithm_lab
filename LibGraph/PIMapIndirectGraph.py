@@ -68,12 +68,8 @@ class PIMapIndirectGraph:
         xb, yb = inv_graph.get(ib)
         self._graph.pop(frozenset({(ia, xa, ya), (ib, xb, yb)}))
 
-    def held_karp(self, v, s, d, p):
-        """
-        :param v: target node
-        :param s: lst of nodes we have to go through
-        :return:
-        """
+    def held_karp(self, v: (float, float), s: frozenset(), d: dict(), pred: dict()):
+
         # TODO tutte le operazioni vanno fatte su una copia del grafo, NON SULL ORIGINALE! (usare deepcopy)
 
         # Base case
@@ -92,7 +88,7 @@ class PIMapIndirectGraph:
             min_prec = None
             s1 = {u for u in s if u != v}
 
-            for u in s1:
+            for u in S1:
                 dist = self.held_karp(u, s1, d, pred)  # recursive call
                 print("Dist:", dist)
 
