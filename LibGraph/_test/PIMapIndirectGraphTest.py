@@ -8,24 +8,24 @@ class TestPIMapIndirectGraph(unittest.TestCase):
     def test_add_arch(self):
         graph = PIMapIndirectGraph()
 
-        graph.add_arch((5, 7), (6, 2), 3)
-        graph.add_arch((4, 1), (8, 3), 7)
-        graph.add_arch((4, 8), (6, 2), 3)
+        graph.add_arch((1, 5, 7), (2, 6, 2), 3)
+        graph.add_arch((3, 4, 1), (4, 8, 3), 7)
+        graph.add_arch((5, 4, 8), (2, 6, 2), 3)
 
         self.assertEqual(
-            {(frozenset({(6, 2), (5, 7)}), 3), (frozenset({(6, 2), (4, 8)}), 3), (frozenset({(8, 3), (4, 1)}), 7)}
+            {(frozenset({(5, 4, 8), (2, 6, 2)}), 3), (frozenset({(4, 8, 3), (3, 4, 1)}), 7),
+             (frozenset({(1, 5, 7), (2, 6, 2)}), 3)}
             , graph.get_arch_list())
 
-        graph.remove_arch((5, 7), (6, 2))
+        graph.remove_arch((1, 5, 7), (2, 6, 2))
 
-        self.assertEqual({(frozenset({(6, 2), (4, 8)}), 3), (frozenset({(8, 3), (4, 1)}), 7)}, graph.get_arch_list())
-        self.assertEqual({(8, 3), (4, 8), (5, 7), (6, 2), (4, 1)}, graph.get_node_list())
-
-        print("skfm")
-        print(graph.get_arch_list())
-        print(graph.get_node_list())
+        self.assertEqual({(frozenset({(3, 4, 1), (4, 8, 3)}), 7), (frozenset({(2, 6, 2), (5, 4, 8)}), 3)},
+                         graph.get_arch_list())
+        self.assertEqual({((4, 1), 3), ((4, 8), 5), ((5, 7), 1), ((6, 2), 2), ((8, 3), 4)}, graph.get_node_list())
 
         graph.remove_node((6, 2))
 
-        print(graph.get_arch_list())
-        print(graph.get_node_list())
+        self.assertEqual({(frozenset({(4, 8, 3), (3, 4, 1)}), 7), (frozenset({(5, 4, 8), (2, 6, 2)}), 3)},
+                         graph.get_arch_list())
+        self.assertEqual({((4, 8), 5), ((5, 7), 1), ((8, 3), 4), ((4, 1), 3)}
+                         , graph.get_node_list())
