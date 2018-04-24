@@ -17,7 +17,7 @@ class TestPIMapIndirectGraph(unittest.TestCase):
              (frozenset({(1, 5, 7), (2, 6, 2)}), 3)}
             , graph.get_arch_list())
 
-        graph.remove_arch((1, 5, 7), (2, 6, 2))
+        graph.remove_arch_by_coord((1, 5, 7), (2, 6, 2))
 
         self.assertEqual({(frozenset({(3, 4, 1), (4, 8, 3)}), 7), (frozenset({(2, 6, 2), (5, 4, 8)}), 3)},
                          graph.get_arch_list())

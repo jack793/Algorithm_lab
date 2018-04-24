@@ -33,40 +33,13 @@ class PIMapIndirectGraph:
         self._graph[frozenset({node_a, node_b})] = time
 
     def remove_node(self, node):
-        """
-        Remove a node from the graph
-        :param node: tuple (x,y) containing the coordinates of the node
-        :return:
-        """
         self._nodes.pop(node)
         for k in self._graph.keys():
             if node in k:
                 self._graph.pop(k)
 
-    def remove_arch_by_coord(self, node_a, node_b):
-        """
-        Remove an arch from the graph by its nodes coordinates
-        :param node_a: tuple (x,y) containing the index and the coordinates of the node a
-        :param node_b: tuple (x,y) containing the index and the coordinates of the node b
-        :return:
-        """
-        xa, ya = node_a
-        xb, yb = node_b
-        ia = self._nodes.get(node_a)
-        ib = self._nodes.get(node_b)
-        self._graph.pop(frozenset({(ia, xa, ya), (ib, xb, yb)}))
-
-    def _remove_arch_by_index(self, ia, ib):
-        """
-        Remove an arch from the graph by its nodes indexes
-        :param ia: index of node a
-        :param ib: index of node b
-        :return:
-        """
-        inv_graph = dict({(v, k) for k, v in self._graph.items()})
-        xa, ya = inv_graph.get(ia)
-        xb, yb = inv_graph.get(ib)
-        self._graph.pop(frozenset({(ia, xa, ya), (ib, xb, yb)}))
+    def remove_arch(self, node_a, node_b):
+        self._graph.pop(frozenset({node_a, node_b}))
 
     def held_karp(self, v, s, d, p):
         """
@@ -79,13 +52,9 @@ class PIMapIndirectGraph:
         # Base case
         if len(s) == 1:  # or == v ?
             print("Base case:", v)
-            return self._graph[frozenset({v, list(self.get_node_list())[0]})]
-            # S contiene un unico elemento che è v, stiamo andando da 0 --> v
-
-        elif d[v, s] is not None:
-
-            return d[v, s]
-
+            return self._time[frozenset({v, 0})]  # S contiene un unico elemento che è v, stiamo andando da 0 --> v
+        elif self._time[frozenset({v, s})] is not None:
+            return self._time[frozenset({v, s})]
         else:
             min_dist = float(inf)
             min_prec = None
