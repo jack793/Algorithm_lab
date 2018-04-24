@@ -52,9 +52,13 @@ class PIMapIndirectGraph:
         # Base case
         if len(s) == 1:  # or == v ?
             print("Base case:", v)
-            return self._time[frozenset({v, 0})]  # S contiene un unico elemento che è v, stiamo andando da 0 --> v
-        elif self._time[frozenset({v, s})] is not None:
-            return self._time[frozenset({v, s})]
+            return self._graph[frozenset({v, list(self.get_node_list())[0]})]
+            # S contiene un unico elemento che è v, stiamo andando da 0 --> v
+
+        elif d[v, s] is not None:
+
+            return d[v, s]
+
         else:
             min_dist = float(inf)
             min_prec = None
