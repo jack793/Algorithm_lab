@@ -111,7 +111,10 @@ else:
 
 # print(set(g.get_arch_list()))
 
-print(g.held_karp(0, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)))
+d = dict()
+pred = dict()
+
+g.held_karp(0, g.)
 
 # plt.title("Piano d'Evaquazione")
 # plt.xlabel("Capacità totale")

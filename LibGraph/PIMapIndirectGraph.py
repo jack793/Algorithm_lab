@@ -18,7 +18,7 @@ class PIMapIndirectGraph:
     def remove_arch(self, node_a, node_b):
         self._graph.pop(frozenset({node_a, node_b}))
 
-    def held_karp(self, v, s):
+    def held_karp(self, v, s, d, p):
         """
         :param v: target node
         :param s: lst of nodes we have to go through
