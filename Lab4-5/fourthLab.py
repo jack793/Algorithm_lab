@@ -1,12 +1,12 @@
 # 1. Algoritmi esatti: implementate l'algoritmo esatto di Held e Karp. Poiché questo algoritmo è di complessità esponenziale, l'implementazione deve interrompere l'esecuzione se non trova la soluzione ottima entro TT minuti, restituendo la soluzione migliore trovata fino a quel momento, se esiste. Molto probabilmente l'algoritmo riuscirà a trovare la soluzione ottima solo per le istanze più piccole (circa 10 nodi), e fornirà una soluzione parziale per quelle più grandi.
 # 2. Euristiche costruttive: scegliete una fra le euristiche costruttive viste a lezione ed implementatela: Nearest Neighbour, Closest Insertion, Farthest Insertion, Random Insertion, Cheapest Insertion.
 # 3. Algoritmi 2-approssimati: implementate l'algoritmo 2-approssimato basato sull'albero di copertura minimo.
-
+from collections import defaultdict
 from math import *
 
 from LibGraph.PIMapIndirectGraph import PIMapIndirectGraph
 
-input_file = open("../Lab4-5/Data/berlin52.tsp", "r")
+input_file = open("Data/burma14.tsp", "r")
 for _ in range(4):
     input_file.readline()
 
@@ -48,7 +48,7 @@ if str(y) == "GEO":
             radc = PI * (degc + 5.0 * minc / 3.0) / 180.0
 
             # INSERIMENTO DI UN NUOVO NODO IN NODES
-            nodes[a] = (radb, radc)
+            nodes[a] = (a, radb, radc)
 
         except ValueError:
             pass
@@ -57,8 +57,8 @@ if str(y) == "GEO":
     for i in nodes:
         for j in nodes:
             if i is not j:  # EVITO DI INSERIRE ARCHI DA UN NODO A SE STESSO
-                x, y = nodes[i]
-                w, z = nodes[j]
+                useless1, x, y = nodes[i]
+                useless2, w, z = nodes[j]
 
                 q1 = cos(y - z)
                 q2 = cos(x - w)
@@ -92,7 +92,7 @@ else:
             b = float(b)
             c = float(c)
 
-            nodes[a] = (b, c)
+            nodes[a] = (a, b, c)
 
         except ValueError:
             pass
@@ -102,8 +102,8 @@ else:
         for j in nodes:
             if i is not j:  # EVITO DI INSERIRE ARCHI DA UN NODO A SE STESSO
 
-                x, y = nodes[i]
-                w, z = nodes[j]
+                useless1, x, y = nodes[i]
+                useless2, w, z = nodes[j]
 
                 dist = sqrt(pow((w - x), 2) + pow((z - y), 2))
 
@@ -114,7 +114,8 @@ else:
 d = dict()
 pred = dict()
 
-g.held_karp(0, g.)
+
+g.held_karp(nodes[1], frozenset(g.get_node_list()), d, pred)
 
 # plt.title("Piano d'Evaquazione")
 # plt.xlabel("Capacità totale")
