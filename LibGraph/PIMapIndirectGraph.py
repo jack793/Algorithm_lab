@@ -50,7 +50,8 @@ class PIMapIndirectGraph:
         # TODO tutte le operazioni vanno fatte su una copia del grafo, NON SULL ORIGINALE! (usare deepcopy)
 
         # Base case
-        if len(s) == 1:  # or == v ?
+        if len(s) == 1 and s[0] == v:
+
             print("Base case:", v)
             return self._graph[frozenset({v, list(self.get_node_list())[0]})]
             # S contiene un unico elemento che è v, stiamo andando da 0 --> v
@@ -62,15 +63,17 @@ class PIMapIndirectGraph:
         else:
             min_dist = float(inf)
             min_prec = None
-            S1 = tuple([u for u in s if u != v])
-            for u in S1:
-                dist = self.held_karp(u, S1)  # recursive call
+            s1 = {u for u in s if u != v}
+
+            for u in s1:
+                dist = self.held_karp(u, s1, d, pred)  # recursive call
                 print("Dist:", dist)
-                # print("currently arch:", self._get_adj_matrix(u, v))
-                # print("compare:", dist + self._get_adj_matrix(u, v), min_dist)
-                if dist + self._time[({u, v})] < min_dist:  # update
-                    min_dist = dist + self._time[frozenset({u, v})]
+
+                if dist + self._graph[({u, v})] < min_dist:  # update
+                    min_dist = dist + self._graph[frozenset({u, v})]
                     min_prec = u
-            self._time[frozenset({v, s})] = min_dist
-            self.set_parents((v, s), min_prec)
+
+            d[(v, s)] = min_dist
+            pred[(v, s)] = min_prec
+
             return min_dist
