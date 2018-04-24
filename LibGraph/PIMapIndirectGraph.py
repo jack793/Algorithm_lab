@@ -16,21 +16,34 @@ class PIMapIndirectGraph:
     def get_arch_list(self):
         return {(k, v) for k, v in self._graph.items()}
 
-    def add_node(self, node, index):
-        if node not in self._nodes:
-            self._nodes[node] = index
+    def get_node_id_by_coord(self, x, y):
+        return self._nodes[(x, y)]
+
+    def get_node_coord_by_id(self, node_id):
+        for k, v in self._nodes.items():
+            if v is node_id:
+                return k
+        raise KeyError("Invalid id")
+
+    def add_node(self, x, y, index):
+        if (x, y) not in self._nodes.keys() and index not in self._nodes.values():
+            self._nodes[(x, y)] = index
         else:
-            if self._nodes[node] is not index:
-                raise Exception("Invalid index, already set:", node, index)
+            try:
+                if self._nodes[(x, y)] is not index:
+                    raise Exception("Invalid coordinates, already set:", (x, y), index)
+
+            except KeyError:
+                raise Exception("Invalid index, already set:", (x, y), index)
 
     def add_arch(self, node_a, node_b, time):
-        i, x, y = node_a
-        i2, x2, y2 = node_b
+        x, y, i = node_a
+        x2, y2, i2 = node_b
         if x is x2 and y is y2:
             raise Exception("Invalid nodes, can't draw arch from and to the same node.")
-        self.add_node((x, y), i)
-        self.add_node((x2, y2), i2)
-        self._graph[frozenset({node_a, node_b})] = time
+        self.add_node(x, y, i)
+        self.add_node(x2, y2, i2)
+        self._graph[frozenset({(x, y), (x2, y2)})] = time
 
     def remove_node(self, node):
         """
@@ -39,9 +52,7 @@ class PIMapIndirectGraph:
         :return:
         """
         self._nodes.pop(node)
-        for k in self._graph.keys():
-            if node in k:
-                self._graph.pop(k)
+        self._graph = {k: v for k, v in self._graph.items() if node not in k}
 
     def remove_arch_by_coord(self, node_a, node_b):
         """
@@ -52,9 +63,7 @@ class PIMapIndirectGraph:
         """
         xa, ya = node_a
         xb, yb = node_b
-        ia = self._nodes.get(node_a)
-        ib = self._nodes.get(node_b)
-        self._graph.pop(frozenset({(ia, xa, ya), (ib, xb, yb)}))
+        self._graph.pop(frozenset({(xa, ya), (xb, yb)}))
 
     def _remove_arch_by_index(self, ia, ib):
         """
@@ -63,7 +72,7 @@ class PIMapIndirectGraph:
         :param ib: index of node b
         :return:
         """
-        inv_graph = dict({(v, k) for k, v in self._graph.items()})
+        inv_graph = {v: k for k, v in self._graph.items()}
         xa, ya = inv_graph.get(ia)
         xb, yb = inv_graph.get(ib)
         self._graph.pop(frozenset({(ia, xa, ya), (ib, xb, yb)}))
