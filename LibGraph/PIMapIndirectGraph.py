@@ -77,35 +77,36 @@ class PIMapIndirectGraph:
         xb, yb = inv_graph.get(ib)
         self._graph.pop(frozenset({(ia, xa, ya), (ib, xb, yb)}))
 
-    def held_karp(self, v: (float, float), s: frozenset(), d: dict(), pred: dict()):
+    def held_karp(self, v: (float, float), s: frozenset(), zero_node, d: dict(), pred: dict()):
 
         # TODO tutte le operazioni vanno fatte su una copia del grafo, NON SULL ORIGINALE! (usare deepcopy)
 
         # Base case
-        if len(s) == 1 and s[0] == v:
+        if len(s) is 1 and v in self.get_node_list():
 
             print("Base case:", v)
-            return self._graph[frozenset({v, list(self.get_node_list())[0]})]
+            return self._graph[frozenset({v, zero_node})]
             # S contiene un unico elemento che è v, stiamo andando da 0 --> v
 
-        elif d[v, s] is not None:
-
-            return d[v, s]
-
         else:
-            min_dist = float(inf)
-            min_prec = None
-            s1 = {u for u in s if u != v}
 
-            for u in S1:
-                dist = self.held_karp(u, s1, d, pred)  # recursive call
-                print("Dist:", dist)
+            try:
+                return d[v, frozenset(s)]
 
-                if dist + self._graph[({u, v})] < min_dist:  # update
-                    min_dist = dist + self._graph[frozenset({u, v})]
-                    min_prec = u
+            except KeyError:
+                min_dist = float(inf)
+                min_prec = None
+                s1 = {u for u in s if u != v}
 
-            d[(v, s)] = min_dist
-            pred[(v, s)] = min_prec
+                for u in s1:
+                    dist = self.held_karp(u, s1, zero_node, d, pred)  # recursive call
+                    print("Dist:", dist)
 
-            return min_dist
+                    if dist + self._graph[({u, v})] < min_dist:  # update
+                        min_dist = dist + self._graph[frozenset({u, v})]
+                        min_prec = u
+
+                d[(v, s)] = min_dist
+                pred[(v, s)] = min_prec
+
+                return min_dist
