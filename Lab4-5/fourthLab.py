@@ -6,7 +6,7 @@ from math import *
 
 from LibGraph.PIMapIndirectGraph import PIMapIndirectGraph
 
-input_file = open("Data/berlin52.tsp", "r")
+input_file = open("../Lab4-5/Data/berlin52.tsp", "r")
 for _ in range(4):
     input_file.readline()
 
@@ -109,7 +109,9 @@ else:
 
                 g.add_arch(nodes[i], nodes[j], dist)
 
-#print(set(g.get_arch_list()))
+# print(set(g.get_arch_list()))
+
+print(g.held_karp(0, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)))
 
 # plt.title("Piano d'Evaquazione")
 # plt.xlabel("Capacità totale")

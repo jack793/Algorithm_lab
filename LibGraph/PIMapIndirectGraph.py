@@ -29,9 +29,9 @@ class PIMapIndirectGraph:
         # Base case
         if len(s) == 1:  # or == v ?
             print("Base case:", v)
-            return self._time[({v, 0})]  # S contiene un unico elemento che è v, stiamo andando da 0 --> v
-        elif self._time[({v, s})] is not None:
-            return self._time[({v, s})]
+            return self._time[frozenset({v, 0})] # S contiene un unico elemento che è v, stiamo andando da 0 --> v
+        elif self._time[frozenset({v, s})] is not None:
+            return self._time[frozenset({v, s})]
         else:
             min_dist = float(inf)
             min_prec = None
@@ -42,8 +42,8 @@ class PIMapIndirectGraph:
                 # print("currently arch:", self._get_adj_matrix(u, v))
                 # print("compare:", dist + self._get_adj_matrix(u, v), min_dist)
                 if dist + self._time[({u, v})] < min_dist:  # update
-                    min_dist = dist + self._time[({u, v})]
+                    min_dist = dist + self._time[frozenset({u, v})]
                     min_prec = u
-            self._time[({v, s})] = min_dist
+            self._time[frozenset({v, s})] = min_dist
             self.set_parents((v, s), min_prec)
             return min_dist
