@@ -1,8 +1,4 @@
-from LibGraph.PIIndirectGraph import PIIndirectGraph
-
 from math import inf
-
-from copy import deepcopy
 
 
 class PIMapIndirectGraph:
@@ -77,26 +73,29 @@ class PIMapIndirectGraph:
         xb, yb = inv_graph.get(ib)
         self._graph.pop(frozenset({(ia, xa, ya), (ib, xb, yb)}))
 
-    def held_karp(self, v: (float, float), s: frozenset(), zero_node, d: dict(), pred: dict()):
+    def held_karp(self, v: (float, float, int), s: frozenset(), zero_node: (float, float, int), d: dict(),
+                  pred: dict()):
 
         # TODO tutte le operazioni vanno fatte su una copia del grafo, NON SULL ORIGINALE! (usare deepcopy)
 
         # Base case
         if len(s) is 1 and v in self.get_node_list():
 
-            print("Base case:", v)
-            return self._graph[frozenset({v, zero_node})]
+            print("Base case:", v, zero_node)
+            coordv, _ = v
+            coordz, _ = zero_node
+            return self._graph[frozenset({coordv, coordz})]
             # S contiene un unico elemento che è v, stiamo andando da 0 --> v
 
         else:
 
             try:
-                return d[v, frozenset(s)]
+                return d[v, s]
 
             except KeyError:
                 min_dist = float(inf)
                 min_prec = None
-                s1 = {u for u in s if u != v}
+                s1 = frozenset({u for u in s if u != v})
 
                 for u in s1:
                     dist = self.held_karp(u, s1, zero_node, d, pred)  # recursive call

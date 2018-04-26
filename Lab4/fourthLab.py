@@ -48,7 +48,7 @@ if str(y) == "GEO":
             radc = PI * (degc + 5.0 * minc / 3.0) / 180.0
 
             # INSERIMENTO DI UN NUOVO NODO IN NODES
-            nodes[a] = (a, radb, radc)
+            nodes[a] = (radb, radc, a)
 
         except ValueError:
             pass
@@ -92,7 +92,7 @@ else:
             b = float(b)
             c = float(c)
 
-            nodes[a] = (a, b, c)
+            nodes[a] = (b, c, a)
 
         except ValueError:
             pass
