@@ -287,3 +287,6 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/git,vim,linux,macos,python,windows,pycharm,sublimetext,visualstudiocode
 
 *.xml
+
+# Input files
+*.tsp
