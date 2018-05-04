@@ -71,7 +71,7 @@ class Graph:
     @staticmethod
     def calc_distance(i, j, is_geo: bool):
         if is_geo:
-            lat_i = Graph.convert_to_rads(i[1])  # u[0] index, u[1] node latitude
+            lat_i = Graph.convert_to_rads(i[1])  # u[0] index,  u[1] u[2] node latitude, longitude
             long_i = Graph.convert_to_rads(i[2])
 
             lat_j = Graph.convert_to_rads(j[1])

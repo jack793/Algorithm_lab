@@ -3,7 +3,7 @@ from Lab4.graph import *
 
 geo = False
 cont = 1
-input_name = "Lab4/Data/berlin52.tsp"
+input_name = "Lab4/Data/ulysses16.tsp"
 
 with open(input_name) as f:
     line = f.readline()
@@ -17,13 +17,12 @@ with open(input_name) as f:
 
 dataset = np.loadtxt(input_name, skiprows=cont, comments=["EOF"])
 
-# print(dataset[0].split(":")[1])
 # print(dataset)
 data_length = len(dataset)
 s = tuple(np.arange(data_length))
-# create_adj_matrix(n)
-# adj_matrix = create_adj_matrix(dataset)
 
 graph = Graph(dataset, geo)
 # print("matrix: \n", graph.get_adj_matrix())
-print(held_karp(graph, 0, s))
+#print(held_karp(graph, 0, s))
+
+cheapest_insertion(graph)
