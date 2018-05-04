@@ -1,12 +1,17 @@
-# 1. Algoritmi esatti: implementate l'algoritmo esatto di Held e Karp. Poiché questo algoritmo è di complessità esponenziale, l'implementazione deve interrompere l'esecuzione se non trova la soluzione ottima entro TT minuti, restituendo la soluzione migliore trovata fino a quel momento, se esiste. Molto probabilmente l'algoritmo riuscirà a trovare la soluzione ottima solo per le istanze più piccole (circa 10 nodi), e fornirà una soluzione parziale per quelle più grandi.
-# 2. Euristiche costruttive: scegliete una fra le euristiche costruttive viste a lezione ed implementatela: Nearest Neighbour, Closest Insertion, Farthest Insertion, Random Insertion, Cheapest Insertion.
+# 1. Algoritmi esatti: implementate l'algoritmo esatto di Held e Karp. Poiché questo algoritmo è di complessità
+# esponenziale, l'implementazione deve interrompere l'esecuzione se non trova la soluzione ottima entro TT minuti,
+# restituendo la soluzione migliore trovata fino a quel momento, se esiste. Molto probabilmente l'algoritmo riuscirà
+# a trovare la soluzione ottima solo per le istanze più piccole (circa 10 nodi), e fornirà una soluzione parziale per
+# quelle più grandi.
+# 2. Euristiche costruttive: scegliete una fra le euristiche costruttive viste a lezione ed
+# implementatela: Nearest Neighbour, Closest Insertion, Farthest Insertion, Random Insertion, Cheapest Insertion.
 # 3. Algoritmi 2-approssimati: implementate l'algoritmo 2-approssimato basato sull'albero di copertura minimo.
 from collections import defaultdict
 from math import *
 
 from LibGraph.PIMapIndirectGraph import PIMapIndirectGraph
 
-input_file = open("Data/burma14.tsp", "r")
+input_file = open("Data/.tsp", "r")
 for _ in range(4):
     input_file.readline()
 
