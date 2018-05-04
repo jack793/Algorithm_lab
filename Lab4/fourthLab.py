@@ -11,7 +11,7 @@ from math import *
 
 from LibGraph.PIMapIndirectGraph import PIMapIndirectGraph
 
-input_file = open("Data/.tsp", "r")
+input_file = open("Data/berlin52.tsp", "r")
 for _ in range(4):
     input_file.readline()
 

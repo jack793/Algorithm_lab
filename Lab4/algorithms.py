@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 INFINITY = float('inf')
@@ -17,7 +19,7 @@ def held_karp(graph, v, s):
     elif graph.get_distances((v, s)) is not None:
         return graph.get_distances((v, s))
     else:
-        min_dist = float('inf')
+        min_dist = math.inf
         min_prec = None
         s1 = tuple([u for u in s if u != v])
         for u in s1:
@@ -48,24 +50,59 @@ def cheapest_insertion(graph):
     # Consider the partial circuit composed only of the vertex 0. Find a
     # vertex j that minimizes w (0, j) and constructs the partial circuit (0, j);
 
-    C = [0]
+    c = [0]
     adj_matrix = graph.get_adj_matrix()
 
-    extraction_list = set((np.arange(graph.get_len())))
-    extraction_list.remove(0)
+    not_extracted_nodes = set(np.arange(graph.get_len()))
+    not_extracted_nodes.remove(0)
 
     # print(extraction_list)
 
-    min_length = INFINITY
-    index_node = None
-
-    # find the min and add to the cycle C
-    for i, val in enumerate(adj_matrix[0, 1:]):  # enumerate() adds counter to an iterable and returns it.
-        if val < min_length:
-            min_length = val
-            index_node = i
+    # Add second node
+    c.append(min(enumerate(adj_matrix[0, 1:]), key=lambda t: t[1])[0])
 
     # print(list(enumerate(adj_matrix[0, 1:])))
 
-    C.append(index_node)
-    extraction_list.remove(index_node)
+    not_extracted_nodes.remove(c[1])
+
+    def get_new_k():
+        """
+        Find new k value to insert in the cycle
+        :return: (i,k)
+            i - left node index in the list
+            k - new node to insert
+        """
+
+        res = (-2, -1, math.inf)
+        # for node in range(len(c)):
+        #     i, j = (c[node], c[(node + 1) % len(c)])
+        #     indexes = [k for k in extraction_list]
+        #     new_res = node, min(indexes, key=lambda k: adj_matrix[i, k] + adj_matrix[k, j] - adj_matrix[i, j])
+        #     res = min(res, new_res, key=lambda v: v[1])
+        #     print(adj_matrix[c[res[0]], res[1]] + adj_matrix[c[(res[0] + 1) % len(c)], res[1]])
+
+        indexes = [
+            (i, k, j)
+            for i, j in map(lambda v: (v, (v + 1) % len(c)), range(len(c)))
+            for k in not_extracted_nodes]
+        i, k, j = min(indexes,
+                      key=lambda tup: adj_matrix[c[tup[0]], tup[1]] + adj_matrix[tup[1], c[tup[2]]] - adj_matrix[
+                          c[tup[0]], c[tup[2]]])
+
+        dist = adj_matrix[c[i], k] + adj_matrix[k, c[j]] - adj_matrix[c[i], c[j]]
+
+        res = min(res, (i, k, dist), key=lambda v: v[2])
+
+        if res is (-1, 0, math.inf):
+            raise Exception("No node found in the extraction list")
+
+        return res
+
+    while not_extracted_nodes:
+        precedent_node_index, new_node, new_dist = get_new_k()
+        not_extracted_nodes.remove(new_node)
+        c.insert(precedent_node_index + 1, new_node)
+
+    for v in list(map(lambda v: (c[v], c[(v + 1) % len(c)], adj_matrix[v, (v + 1) % len(c)]), range(len(c)))):
+        print(v)
+    return sum(map(lambda v: adj_matrix[v, (v + 1) % len(c)], range(len(c))))
