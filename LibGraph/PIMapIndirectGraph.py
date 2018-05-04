@@ -76,8 +76,6 @@ class PIMapIndirectGraph:
     def held_karp(self, v: (float, float, int), s: frozenset(), zero_node: (float, float, int), d: dict(),
                   pred: dict()):
 
-        # TODO tutte le operazioni vanno fatte su una copia del grafo, NON SULL ORIGINALE! (usare deepcopy)
-
         # Base case
         if len(s) is 1 and v in self.get_node_list():
 
