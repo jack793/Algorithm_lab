@@ -1,8 +1,6 @@
 import math
 import numpy as np
 
-INFINITY = float('inf')
-
 
 def held_karp(graph, v, s):
     """
@@ -54,6 +52,7 @@ def get_cycle_cost(graph, cycle):
 # 3. Find an edge [i,j] of the subtour and a node k not in the subtour, such that the increase of
 # length f = c + c - c is minimized. Modify the subtour by inserting k between i and j. ik kj ij
 # 4. Go to 3 until a Hamiltonian cycle is formed.
+
 def cheapest_insertion(graph):
     """
     :param graph: a weighted graph G = (V, E)
@@ -69,77 +68,38 @@ def cheapest_insertion(graph):
     not_extracted_nodes = set(np.arange(graph.get_len()))
     not_extracted_nodes.remove(0)
 
-    # print(extraction_list)
-
     # Add second node
     c.append(min(enumerate(adj_matrix[0, 1:]), key=lambda t: t[1])[0])
 
-    # print(list(enumerate(adj_matrix[0, 1:])))
-
     not_extracted_nodes.remove(c[1])
 
-    # def get_new_k():
-    #     """
-    #     Find new k value to insert in the cycle
-    #     :return: (i,k)
-    #         i - left node index in the list
-    #         k - new node to insert
-    #     """
-    #
-    #     res = (-2, -1, math.inf)
-    #     # for node in range(len(c)):
-    #     #     i, j = (c[node], c[(node + 1) % len(c)])
-    #     #     indexes = [k for k in extraction_list]
-    #     #     new_res = node, min(indexes, key=lambda k: adj_matrix[i, k] + adj_matrix[k, j] - adj_matrix[i, j])
-    #     #     res = min(res, new_res, key=lambda v: v[1])
-    #     #     print(adj_matrix[c[res[0]], res[1]] + adj_matrix[c[(res[0] + 1) % len(c)], res[1]])
-    #
-    #     indexes = [
-    #         (i, k, j)
-    #         for i, j in map(lambda v: (v, (v + 1) % len(c)), range(len(c)))
-    #         for k in not_extracted_nodes]
-    #     i, k, j = min(indexes,
-    #                   key=lambda tup: adj_matrix[c[tup[0]], tup[1]] + adj_matrix[tup[1], c[tup[2]]] - adj_matrix[
-    #                       c[tup[0]], c[tup[2]]])
-    #
-    #     dist = adj_matrix[c[i], k] + adj_matrix[k, c[j]] - adj_matrix[c[i], c[j]]
-    #
-    #     res = min(res, (i, k, dist), key=lambda v: v[2])
-    #
-    #     if res is (-1, 0, math.inf):
-    #         raise Exception("No node found in the extraction list")
-    #
-    #     return res
-
-    def cheapest_selection(not_extracted, c):
-        min_value = INFINITY
-        edges = None
+    # (2) Selection:
+    def cheapest_selection(not_extracted, cy):
+        min_value = math.inf
+        edge = None
         next_node = None
-        for i, node in enumerate(c):
+        for i, node in enumerate(cy):
             # for all k (nodes) not yet extracted we search for a k and a edge(_,_) that min the cycle cost
-            for k in not_extracted:
-                print(k)
+            for node_k in not_extracted:
                 j = i + 1
-                if j == len(c):
+                if j == len(cy):
                     # if out of bound w/ y, finished the hcycle
                     j = 0
 
-                if adj_matrix[c[i]][k] + adj_matrix[c[j]][k] - adj_matrix[c[i]][c[j]] < min_value:
-                    min_value = adj_matrix[c[i]][k] + adj_matrix[c[j]][k] - adj_matrix[c[i]][c[j]]
-                    edges = (i, j)
-                    next_node = k
+                if adj_matrix[cy[i]][node_k] + adj_matrix[cy[j]][node_k] - adj_matrix[cy[i]][cy[j]] < min_value:
+                    min_value = adj_matrix[cy[i]][node_k] + adj_matrix[cy[j]][node_k] - adj_matrix[cy[i]][cy[j]]
+                    edge = (i, j)
+                    next_node = node_k
 
-        return edges, next_node
+        return edge, next_node
 
-    while len(not_extracted_nodes) is not 0:
-        # precedent_node_index, new_node, new_dist = get_new_k()
-        # not_extracted_nodes.remove(new_node)
-        # c.insert(precedent_node_index + 1, new_node)
+    while not_extracted_nodes:
 
         edges, k = cheapest_selection(not_extracted_nodes, c)
 
         not_extracted_nodes.remove(k)
 
+        # (3) Insertion:
         # connect last node w/ the 1st
         if edges[1] == 0:
             c.append(k)
@@ -147,9 +107,3 @@ def cheapest_insertion(graph):
             c.insert(edges[1], k)
 
     return get_cycle_cost(graph, c)
-
-    # for v in list(
-    #         map(lambda v: (c[v], c[(v + 1) % len(c)], adj_matrix[v, (v + 1) % len(c)]),
-    #             range(len(c)))):
-    #     print(v)
-    # return sum(map(lambda v: adj_matrix[v, (v + 1) % len(c)], range(len(c))))
