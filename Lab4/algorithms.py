@@ -71,7 +71,7 @@ def cheapest_insertion(graph):
     # Add second node
     c.append(min(enumerate(adj_matrix[0, 1:]), key=lambda t: t[1])[0])
 
-    not_extracted_nodes.remove(c[1])
+    not_extracted_nodes.remove(c[1] + 1)  # not the first node !
 
     # (2) Selection:
     def cheapest_selection(not_extracted, cy):

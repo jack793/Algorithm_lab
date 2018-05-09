@@ -3,8 +3,8 @@ from Lab4.graph import *
 
 geo = False
 cont = 1
-# input_name = "Data/berlin52.tsp"
-input_name = "Lab4/Data/berlin52.tsp"
+
+input_name = "Lab4/Data/ch150.tsp"
 
 with open(input_name) as f:
     line = f.readline()
