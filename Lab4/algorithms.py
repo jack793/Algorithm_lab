@@ -65,7 +65,7 @@ def cheapest_insertion(graph):
     c = [0]
     adj_matrix = graph.get_adj_matrix()
 
-    not_extracted_nodes = set(np.arange(graph.get_len()))
+    not_extracted_nodes = set(np.arange(graph.get_vertices()))
     not_extracted_nodes.remove(0)
 
     # Add second node
@@ -107,3 +107,18 @@ def cheapest_insertion(graph):
             c.insert(edges[1], k)
 
     return get_cycle_cost(graph, c)
+
+
+# PRIM ALGORITHM applied on TSP problem it's an efficient way for find a 2-approximated solution for it
+def mst_approx(graph, w, r):
+    """
+
+    :param graph: G = (V,E) connected graph, not oriented and weighted
+    :param w: weight function
+    :param r: a vertex of graph G
+    :return:
+    """
+
+    parents = {}
+
+    return (graph, parents[v] for v in range(graph.get_vertices()) if v != r)

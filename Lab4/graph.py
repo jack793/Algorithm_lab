@@ -54,7 +54,7 @@ class Graph:
         else:
             return self._adj_matrix[u, v]
 
-    def get_len(self):
+    def get_vertices(self):
         return self._length
 
     def set_parents(self, key, value):
