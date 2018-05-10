@@ -1,7 +1,15 @@
 import math
-import numpy as np
+import time
 
+import numpy as np
 import heapq as min_heap
+
+
+# def held_karp_timer(graph, v, s):
+#     start = time.time()
+#     while time.time() < start + 5:
+#         held_karp(graph, v, s)
+#     return
 
 
 def held_karp(graph, v, s):
@@ -11,6 +19,7 @@ def held_karp(graph, v, s):
     :param s: list of nodes (s its considered like a dict)
     :return: cost of the min path from 0 to v that visit all nodes in s
     """
+
     # base case
     if len(s) == 1:
         # print("base case:", v)
@@ -26,7 +35,7 @@ def held_karp(graph, v, s):
             # print("dist:", dist)
             # print("currently arch:", graph.get_adj_matrix(u, v))
             # print("comparison:", dist + graph.get_adj_matrix(u, v), min_dist)
-            if dist + graph.get_adj_matrix(u, v) < min_dist:  # update like algorithm says to me
+            if dist + graph.get_adj_matrix(u, v) < min_dist:  # update total distance
                 min_dist = dist + graph.get_adj_matrix(u, v)
                 min_prec = u
         graph.set_distances((v, s), min_dist)
@@ -116,7 +125,6 @@ def mst_approx(graph, r=0):
     """
 
     :param graph: G = (V,E) connected graph, not oriented and weighted
-    :param w: weight function
     :param r: a vertex of graph G
     :return: minimum coverage Tree
     """
@@ -130,7 +138,7 @@ def mst_approx(graph, r=0):
     keys[r] = 0
 
     tree = graph.get_vertices()  # perhaps is wrong
-    Q = min_heap.heapify(tree)  # TODO fix this! heapify want a list!! we have to build a priority_que on v
+    Q = min_heap.heapify(tree)  # TODO fix this! heapify want a list!! we have to build a priority_queue on v
 
     while len(Q) is not 0:
         u = min_heap.heappop(Q)  # extract smallest item from the heap
