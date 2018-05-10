@@ -129,8 +129,8 @@ def mst_approx(graph, r=0):
 
     keys[r] = 0
 
-    tree = graph.get_vertices()  # perhaps is wrong TODO fix this!
-    Q = min_heap.heapify(tree)
+    tree = graph.get_vertices()  # perhaps is wrong
+    Q = min_heap.heapify(tree)  # TODO fix this! heapify want a list!!
 
     while len(Q) is not 0:
         u = min_heap.heappop(Q)  # extract smallest item from the heap
