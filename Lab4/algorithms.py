@@ -1,6 +1,8 @@
 import math
 import numpy as np
 
+import heapq as min_heap
+
 
 def held_karp(graph, v, s):
     """
@@ -116,9 +118,19 @@ def mst_approx(graph, w, r):
     :param graph: G = (V,E) connected graph, not oriented and weighted
     :param w: weight function
     :param r: a vertex of graph G
-    :return:
+    :return: minimum coverage Tree
     """
-
+    keys = {}
     parents = {}
+    r = 0  # first vertex of graph for choice
+
+    for v in range(graph.get_vertices()):
+        keys[v] = math.inf
+        parents[v] = None
+
+    keys[r] = 0
+
+    tree = graph.get_vertices()  # perhaps is wrong TODO fix this!
+    queue = min_heap.heapify(tree)
 
     return (graph, parents[v] for v in range(graph.get_vertices()) if v != r)
