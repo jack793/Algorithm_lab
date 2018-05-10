@@ -131,6 +131,22 @@ def mst_approx(graph, w, r):
     keys[r] = 0
 
     tree = graph.get_vertices()  # perhaps is wrong TODO fix this!
-    queue = min_heap.heapify(tree)
+    Q = min_heap.heapify(tree)
+
+    while len(Q) is not 0:
+        u = min_heap.heappop(Q)  # extract smallest item from the heap
+
+        adj_matrix = graph.get_adj_matrix()
+        for v in adj_matrix[u]:
+            # check if heapq contains value;
+            # if w(u,v) < key[v];
+            # if u is a noose
+            if (v in zip(*Q)[1]) and adj_matrix[u][v] and u != v < keys[v]:
+                keys[v] = adj_matrix[u][v]  # update new value
+                parents[v] = u  # update parent
+                min_heap._siftdown(Q, v, keys[v])  # decrease_key
+            # end if
+        # end for
+    # end while
 
     return (graph, parents[v] for v in range(graph.get_vertices()) if v != r)
