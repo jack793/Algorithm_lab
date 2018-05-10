@@ -29,4 +29,4 @@ dataset = np.loadtxt(input_name, skiprows=cont, comments=["EOF"])
 # cheapest_insertion(graph)
 
 graph2 = Graph(dataset, geo)
-print(cheapest_insertion(graph2))
+print(mst_approx(graph2))

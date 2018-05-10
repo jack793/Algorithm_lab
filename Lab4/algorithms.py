@@ -140,6 +140,8 @@ def mst_approx(graph, r=0):
             # check if heapq contains value;
             # if w(u,v) < key[v];
             # if u is a noose
+
+            print(v in zip(*Q)[1])
             if (v in zip(*Q)[1]) and adj_matrix[u][v] and u != v < keys[v]:
                 keys[v] = adj_matrix[u][v]  # update new value
                 parents[v] = u  # update parent
@@ -147,5 +149,5 @@ def mst_approx(graph, r=0):
             # end if
         # end for
     # end while
-
-    return (graph, parents[v] for v in range(graph.get_vertices()) if v != r)
+    return True
+    # return (graph, parents[v] for v in range(graph.get_vertices()) if v != r)
