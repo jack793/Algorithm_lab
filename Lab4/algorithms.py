@@ -112,7 +112,7 @@ def cheapest_insertion(graph):
 
 
 # PRIM ALGORITHM applied on TSP problem it's an efficient way for find a 2-approximated solution for it
-def mst_approx(graph, w, r):
+def mst_approx(graph, r=0):
     """
 
     :param graph: G = (V,E) connected graph, not oriented and weighted
@@ -122,7 +122,6 @@ def mst_approx(graph, w, r):
     """
     keys = {}
     parents = {}
-    r = 0  # first vertex of graph for choice
 
     for v in range(graph.get_vertices()):
         keys[v] = math.inf
