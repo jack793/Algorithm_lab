@@ -130,7 +130,7 @@ def mst_approx(graph, r=0):
     keys[r] = 0
 
     tree = graph.get_vertices()  # perhaps is wrong
-    Q = min_heap.heapify(tree)  # TODO fix this! heapify want a list!!
+    Q = min_heap.heapify(tree)  # TODO fix this! heapify want a list!! we have to build a priority_que on v
 
     while len(Q) is not 0:
         u = min_heap.heappop(Q)  # extract smallest item from the heap
@@ -140,12 +140,11 @@ def mst_approx(graph, r=0):
             # check if heapq contains value;
             # if w(u,v) < key[v];
             # if u is a noose
-
-            print(v in zip(*Q)[1])
-            if (v in zip(*Q)[1]) and adj_matrix[u][v] and u != v < keys[v]:
+            if (v in Q) and adj_matrix[u][v] and u != v < keys[v]:
                 keys[v] = adj_matrix[u][v]  # update new value
                 parents[v] = u  # update parent
-                min_heap._siftdown(Q, v, keys[v])  # decrease_key
+                min_heap.heappop(Q, (v, u))  # TODO check if decrease_key works
+                # min_heap._siftdown(Q, v, keys[v])  # decrease_key
             # end if
         # end for
     # end while
