@@ -1,9 +1,9 @@
 import math
-import time
 
 import numpy as np
 import heapq as min_heap
 
+from Lab4.priority_queue import PriorityQueue
 
 # def held_karp_timer(graph, v, s):
 #     start = time.time()
@@ -137,11 +137,11 @@ def mst_approx(graph, r=0):
 
     keys[r] = 0
 
-    tree = [[keys[v], v] for v in range(graph.get_len())]
-    Q = min_heap.heapify(tree)
+    tree = [[keys[v], v] for v in range(graph.get_vertices())]
+    Q = PriorityQueue(tree)
 
-    while len(Q) is not 0:
-        u = min_heap.heappop(Q)  # extract smallest item from the heap
+    while not Q.is_empty():
+        u = Q.extract_min()  # extract smallest item from the heap
 
         adj_matrix = graph.get_adj_matrix()
         for v in adj_matrix[u]:
