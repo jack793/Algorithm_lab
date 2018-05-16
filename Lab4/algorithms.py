@@ -5,6 +5,7 @@ import heapq as min_heap
 
 from Lab4.priority_queue import PriorityQueue
 
+
 # def held_karp_timer(graph, v, s):
 #     start = time.time()
 #     while time.time() < start + 5:
@@ -130,6 +131,7 @@ def mst_approx(graph, r=0):
     """
     keys = {}
     parents = {}
+    adj_matrix = graph.get_adj_matrix()
 
     for v in range(graph.get_vertices()):
         keys[v] = math.inf
@@ -143,12 +145,11 @@ def mst_approx(graph, r=0):
     while not Q.is_empty():
         u = Q.extract_min()  # extract smallest item from the heap
 
-        adj_matrix = graph.get_adj_matrix()
-        for v in adj_matrix[u]:
+        for v in range(graph.get_vertices()):  # for each nodes in adj list
             # check if heapq contains value;
             # if w(u,v) < key[v];
             # if u is a noose
-            if (v in Q) and adj_matrix[u][v] and u != v < keys[v]:
+            if v in Q and adj_matrix[u[1]][v] < keys[v] and u != v:
                 keys[v] = adj_matrix[u][v]  # update new value
                 parents[v] = u  # update parent
                 min_heap.heappop(Q, (v, u))  # TODO check if decrease_key works
