@@ -139,23 +139,27 @@ def mst_approx(graph, r=0):
 
     keys[r] = 0
 
-    tree = [[keys[v], v] for v in range(graph.get_vertices())]
+    tree = [(keys[v], v) for v in range(1, graph.get_vertices() + 1)]
     Q = PriorityQueue(tree)
 
     while not Q.is_empty():
-        u = Q.extract_min()  # extract smallest item from the heap
+        weight, u = Q.extract_min()  # extract smallest item from the heap
 
-        for v in range(graph.get_vertices()):  # for each nodes in adj list
+        # Assumes indexes of the nodes are 1..n
+        for v in range(1, graph.get_vertices() + 1):  # for each nodes in adj list
             # check if heapq contains value;
             # if w(u,v) < key[v];
             # if u is a noose
-            if v in Q and adj_matrix[u[1]][v] < keys[v] and u != v:
-                keys[v] = adj_matrix[u][v]  # update new value
-                parents[v] = u  # update parent
-                min_heap.heappop(Q, (v, u))  # TODO check if decrease_key works
-                # min_heap._siftdown(Q, v, keys[v])  # decrease_key
+
+            # u is already extracted from Q
+            if v in Q and adj_matrix[u][v] < keys[v]:
+                old_weight = keys[v]                        # Old value of weight
+                old_index = Q.heap.index((old_weight, v))   # Get position of tuple in the list
+                keys[v] = adj_matrix[u][v]                  # Update weight
+                parents[v] = u                              # Update parent
+                Q.heap[old_index] = (keys[v], v)            # Update heap list value with new tuple
+                min_heap._siftdown(Q.heap, 0, old_index)    # decrease_key in the queue
             # end if
         # end for
     # end while
-    return True
-    # return (graph, parents[v] for v in range(graph.get_vertices()) if v != r)
+    return {(v, parents[v]) for v in range(1, graph.get_vertices() + 1) if v != r}
