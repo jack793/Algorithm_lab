@@ -4,7 +4,7 @@ from Lab4.graph import *
 geo = False
 cont = 1
 
-input_name = "Lab4/Data/ch150.tsp"
+input_name = "Data/ch150.tsp"
 
 with open(input_name) as f:
     line = f.readline()
@@ -29,4 +29,4 @@ dataset = np.loadtxt(input_name, skiprows=cont, comments=["EOF"])
 # cheapest_insertion(graph)
 
 graph2 = Graph(dataset, geo)
-print(mst_approx(graph2))
+print(mst_approx(graph2, r=0))

@@ -129,8 +129,8 @@ def mst_approx(graph, r=0):
     :param r: a vertex of graph G
     :return: minimum coverage Tree
     """
-    keys = {}
-    parents = {}
+    keys = dict()
+    parents = dict()
     adj_matrix = graph.get_adj_matrix()
 
     for v in range(graph.get_vertices()):
@@ -139,27 +139,27 @@ def mst_approx(graph, r=0):
 
     keys[r] = 0
 
-    tree = [(keys[v], v) for v in range(1, graph.get_vertices() + 1)]
+    tree = [(keys[v], v) for v in range(graph.get_vertices())]
     Q = PriorityQueue(tree)
 
     while not Q.is_empty():
         weight, u = Q.extract_min()  # extract smallest item from the heap
 
         # Assumes indexes of the nodes are 1..n
-        for v in range(1, graph.get_vertices() + 1):  # for each nodes in adj list
+        for v in range(graph.get_vertices()):  # for each nodes in adj list
             # check if heapq contains value;
             # if w(u,v) < key[v];
             # if u is a noose
 
             # u is already extracted from Q
-            if v in Q and adj_matrix[u][v] < keys[v]:
-                old_weight = keys[v]                        # Old value of weight
-                old_index = Q.heap.index((old_weight, v))   # Get position of tuple in the list
-                keys[v] = adj_matrix[u][v]                  # Update weight
-                parents[v] = u                              # Update parent
-                Q.heap[old_index] = (keys[v], v)            # Update heap list value with new tuple
-                min_heap._siftdown(Q.heap, 0, old_index)    # decrease_key in the queue
+            if (keys[v],v) in Q and adj_matrix[u][v] < keys[v]:
+                old_weight = keys[v]  # Old value of weight
+                old_index = Q.heap.index((old_weight, v))  # Get position of tuple in the list
+                keys[v] = adj_matrix[u][v]  # Update weight
+                parents[v] = u  # Update parent
+                Q.heap[old_index] = (keys[v], v)  # Update heap list value with new tuple
+                min_heap._siftdown(Q.heap, 0, old_index)  # decrease_key in the queue
             # end if
         # end for
     # end while
-    return {(v, parents[v]) for v in range(1, graph.get_vertices() + 1) if v != r}
+    return {(v, parents[v]) for v in range(graph.get_vertices()) if v != r}
