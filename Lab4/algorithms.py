@@ -81,10 +81,6 @@ def cheapest_insertion(graph):
     not_extracted_nodes = set(np.arange(graph.get_vertices()))
     not_extracted_nodes.remove(0)
 
-    adj = list(adj_matrix[0, 1:])
-    en = list(enumerate(adj_matrix[0, 1:]))
-    mini = min(enumerate(adj_matrix[0, 1:]), key=lambda t: t[1])
-
     # Add second node
     c.append(min(enumerate(adj_matrix[0, 1:]), key=lambda t: t[1])[0]+1)
 
