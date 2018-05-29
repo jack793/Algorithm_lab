@@ -4,6 +4,7 @@ import math
 import numpy as np
 
 from Lab4.priority_queue import PriorityQueue
+from LibGraph.PIIndirectGraph import PIIndirectGraph
 
 
 # def held_karp_timer(graph, v, s):
@@ -83,7 +84,7 @@ def cheapest_insertion(graph):
     # Add second node
     c.append(min(enumerate(adj_matrix[0, 1:]), key=lambda t: t[1])[0])
 
-    not_extracted_nodes.remove(c[1] + 1)  # not the first node !
+    not_extracted_nodes.remove(c[1])  # not the first node !
 
     # (2) Selection:
     def cheapest_selection(not_extracted, cy):
@@ -162,4 +163,15 @@ def mst_approx(graph, r=0):
             # end if
         # end for
     # end while
-    return {(v, parents[v]) for v in range(graph.get_vertices()) if v != r}
+    tree = {(v, parents[v]) for v in range(graph.get_vertices()) if v != r}
+    i_graph = PIIndirectGraph()
+    for (i, j) in tree:
+        i_graph.add_arch(i, j)
+
+    visited, _ = i_graph.get_dfs_path_from_node(r)
+
+    res = adj_matrix[visited[0], visited[-1]] + sum([adj_matrix[x, x + 1] for x in range(len(visited) - 1)])
+
+    return res
+
+# def get_dfs_cycle(tree, u, visited: set, colors: set):

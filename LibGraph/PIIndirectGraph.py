@@ -85,7 +85,7 @@ class PIIndirectGraph(PIGraph):
 
         def rec(current_node, predecessor_node, nodes_visited, nodes_predecessors):
             if current_node not in nodes_visited:
-                nodes_visited.add(current_node)
+                nodes_visited.append(current_node)
                 nodes_predecessors[current_node] = predecessor_node
 
                 node_adj = self.get_adj_list(current_node)
@@ -94,7 +94,7 @@ class PIIndirectGraph(PIGraph):
 
             return nodes_visited, nodes_predecessors
 
-        return rec(node, None, set(), dict())
+        return rec(node, None, list(), dict())
 
     def get_connected_components(self):
         connected_components = set()

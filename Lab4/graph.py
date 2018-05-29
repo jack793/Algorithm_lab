@@ -1,5 +1,6 @@
-import numpy as np
 from math import cos, acos, sqrt
+
+import numpy as np
 
 # global
 PI = 3.141592
@@ -34,7 +35,12 @@ class Graph:
         try:
             return self._distances[key]
         except KeyError:
-            return None
+            try:
+                (i, j) = key
+                new_key = (j, i)
+                return self._distances[new_key]
+            except KeyError:
+                return None
 
     def set_distances(self, key, value):
         """
