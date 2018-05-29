@@ -290,3 +290,5 @@ $RECYCLE.BIN/
 
 # Input files
 *.tsp
+
+\.idea/Algorithm_lab\.iml
