@@ -82,7 +82,7 @@ def cheapest_insertion(graph):
     not_extracted_nodes.remove(0)
 
     # Add second node
-    c.append(min(enumerate(adj_matrix[0, 1:]), key=lambda t: t[1])[0]+1)
+    c.append(min(enumerate(adj_matrix[0, 1:]), key=lambda t: t[1])[0] + 1)
 
     not_extracted_nodes.remove(c[1])  # not the first node !
 
@@ -170,8 +170,6 @@ def mst_approx(graph, r=0):
 
     visited, _ = i_graph.get_dfs_path_from_node(r)
 
-    res = adj_matrix[visited[0], visited[-1]] + sum([adj_matrix[x, x + 1] for x in range(len(visited) - 1)])
-
-    return res
+    return get_cycle_cost(graph, visited)
 
 # def get_dfs_cycle(tree, u, visited: set, colors: set):
