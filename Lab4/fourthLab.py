@@ -12,7 +12,7 @@ from Lab4.graph import *
 geo = False
 cont = 1
 
-input_name = "Data/ch150.tsp"
+input_name = "Data/gr202.tsp"
 
 with open(input_name) as f:
     line = f.readline()
@@ -26,15 +26,16 @@ with open(input_name) as f:
 
 dataset = np.loadtxt(input_name, skiprows=cont, comments=["EOF"])
 
-# print(dataset)
+# Held Karp
+# graph = Graph(dataset, geo)
 # data_length = len(dataset)
 # s = tuple(np.arange(data_length))
-#
-# graph1 = Graph(dataset, geo)
-# print("matrix: \n", graph1.get_adj_matrix())
-# print(held_karp(graph1, 0, s))
+# print("matrix: \n", graph.get_adj_matrix())
+# print(held_karp(graph, 0, s))
 
-# cheapest_insertion(graph)
+# Cheapest insertion
+# graph = Graph(dataset, geo)
+# print(cheapest_insertion(graph))
 
-graph2 = Graph(dataset, geo)
-print(mst_approx(graph2, r=0))
+graph = Graph(dataset, geo)
+print(mst_approx(graph, r=0))
