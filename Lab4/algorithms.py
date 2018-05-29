@@ -1,7 +1,7 @@
+import heapq as min_heap
 import math
 
 import numpy as np
-import heapq as min_heap
 
 from Lab4.priority_queue import PriorityQueue
 
@@ -152,7 +152,7 @@ def mst_approx(graph, r=0):
             # if u is a noose
 
             # u is already extracted from Q
-            if (keys[v],v) in Q and adj_matrix[u][v] < keys[v]:
+            if (keys[v], v) in Q and adj_matrix[u][v] < keys[v]:
                 old_weight = keys[v]  # Old value of weight
                 old_index = Q.heap.index((old_weight, v))  # Get position of tuple in the list
                 keys[v] = adj_matrix[u][v]  # Update weight
