@@ -6,13 +6,16 @@
 # 2. Euristiche costruttive: scegliete una fra le euristiche costruttive viste a lezione ed
 # implementatela: Nearest Neighbour, Closest Insertion, Farthest Insertion, Random Insertion, Cheapest Insertion.
 # 3. Algoritmi 2-approssimati: implementate l'algoritmo 2-approssimato basato sull'albero di copertura minimo.
+
+from datetime import datetime
+
 from Lab4.algorithms import *
 from Lab4.graph import *
 
 geo = False
 cont = 1
 
-input_name = "Data/gr202.tsp"
+input_name = "Data/berlin52.tsp"
 
 with open(input_name) as f:
     line = f.readline()
@@ -27,15 +30,25 @@ with open(input_name) as f:
 dataset = np.loadtxt(input_name, skiprows=cont, comments=["EOF"])
 
 # Held Karp
-# graph = Graph(dataset, geo)
-# data_length = len(dataset)
-# s = tuple(np.arange(data_length))
+graph = Graph(dataset, geo)
+data_length = len(dataset)
+s = tuple(np.arange(data_length))
 # print("matrix: \n", graph.get_adj_matrix())
-# print(held_karp(graph, 0, s))
+
+timeout = HkTimer(120)
+start = datetime.now()
+result = held_karp(graph, 0, s, timeout)
+if timeout.expired():
+    print("HK parziale {0} ex time {1}".format(result, 120))
+else:
+    delta = (datetime.now() - start)
+    print("HK {0} ex time {1}".format(result, delta))
+
+print(held_karp(graph, 0, s))
 
 # Cheapest insertion
 # graph = Graph(dataset, geo)
 # print(cheapest_insertion(graph))
 
-graph = Graph(dataset, geo)
-print(mst_approx(graph, r=0))
+# graph = Graph(dataset, geo)
+# print(mst_approx(graph, r=0))

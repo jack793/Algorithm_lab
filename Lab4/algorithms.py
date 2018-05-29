@@ -3,25 +3,21 @@ import math
 
 import numpy as np
 
+from Lab4.hk_timer import HkTimer
 from Lab4.priority_queue import PriorityQueue
 from LibGraph.PIIndirectGraph import PIIndirectGraph
 
 
-# def held_karp_timer(graph, v, s):
-#     start = time.time()
-#     while time.time() < start + 5:
-#         held_karp(graph, v, s)
-#     return
-
-
-def held_karp(graph, v, s):
+def held_karp(graph, v, s, timeout: HkTimer = HkTimer()):
     """
     :param graph: Graph
     :param v: target node
     :param s: list of nodes (s its considered like a dict)
+    :param timeout: timeout
     :return: cost of the min path from 0 to v that visit all nodes in s
     """
-
+    if timeout.expired():
+        return math.inf
     # base case
     if len(s) == 1:
         # print("base case:", v)
@@ -33,7 +29,7 @@ def held_karp(graph, v, s):
         min_prec = None
         s1 = tuple([u for u in s if u != v])
         for u in s1:
-            dist = held_karp(graph, u, s1)  # recursive call
+            dist = held_karp(graph, u, s1, timeout)  # recursive call
             # print("dist:", dist)
             # print("currently arch:", graph.get_adj_matrix(u, v))
             # print("comparison:", dist + graph.get_adj_matrix(u, v), min_dist)
