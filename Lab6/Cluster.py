@@ -1,3 +1,6 @@
+from Lab6.Point import Point
+
+
 class Cluster(object):
     """
     Management class for cluster
@@ -23,7 +26,7 @@ class Cluster(object):
             sum_x += i.x
             sum_y += i.y
 
-        return self._centroid
+        return Point(sum_x / len(self._elements), sum_y / len(self._elements))
 
     def get_elements(self):
         return self._elements
@@ -33,4 +36,4 @@ class Cluster(object):
 
     def union(self, cluster) -> None:
         self._elements = self._elements.union(cluster.get_elements())
-        self._centroid = self.calculate_centroid()
+        self.calculate_centroid()
