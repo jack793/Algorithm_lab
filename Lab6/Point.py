@@ -12,7 +12,7 @@ class Point:
         return self._x, self._y
 
     @staticmethod
-    def to_point(t):
+    def to_point(t: tuple):
         """
         Tuple of two coordinates to a Point
         :param t: (x,y) tuple
