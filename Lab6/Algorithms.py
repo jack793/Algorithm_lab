@@ -4,7 +4,7 @@ from Lab6.Cluster import *
 def HierarchicalClustering(p, k):
     insieme = set()
     for point in p:
-        c = Cluster(point)
+        c = Cluster([point])
         insieme.add(c)
 
     while len(insieme) > k:
