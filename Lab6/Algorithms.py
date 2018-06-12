@@ -1,11 +1,11 @@
 
+from Lab6.Cluster import *
+
 def HierarchicalClustering(p, k):
-    n = len(p)
     insieme = set()
     for point in p:
-        node = set()
-        node.add(point)
-        insieme.add(node)
+        c = Cluster(point)
+        insieme.add(c)
 
     while len(insieme) > k:
         i, j = #invoca fastclosestpair
