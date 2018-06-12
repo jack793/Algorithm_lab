@@ -15,7 +15,7 @@ from Lab4.graph import *
 geo = False
 cont = 1
 
-input_name = "Data/berlin52.tsp"
+input_name = "Data/pcb442.tsp"
 
 with open(input_name) as f:
     line = f.readline()
@@ -35,6 +35,8 @@ data_length = len(dataset)
 s = tuple(np.arange(data_length))
 # print("matrix: \n", graph.get_adj_matrix())
 
+print(input_name)
+
 timeout = HkTimer(120)
 start = datetime.now()
 result = held_karp(graph, 0, s, timeout)
@@ -44,11 +46,8 @@ else:
     delta = (datetime.now() - start)
     print("HK {0} ex time {1}".format(result, delta))
 
-print(held_karp(graph, 0, s))
+# print(held_karp(graph, 0, s))
 
-# Cheapest insertion
-# graph = Graph(dataset, geo)
 # print(cheapest_insertion(graph))
 
-# graph = Graph(dataset, geo)
 # print(mst_approx(graph, r=0))
