@@ -63,8 +63,8 @@ def fast_closest_pair(p, s):
 
         (d, i, j) = min(fast_closest_pair(pl, sl), fast_closest_pair(pr, sr))
 
-        x1 = (p[m - 1])[0][0]
-        x2 = (p[m])[0][0]
+        x1 = (p[m - 1]).x
+        x2 = (p[m]).x
         mid = (x1 + x2) / 2
 
         return min((d, i, j), closest_pair_strip(s, mid, d))
@@ -83,7 +83,7 @@ def split(s, pl):
     return sl, sr
 
 
-def closest_pair_strip(s, mid, d):
+def closest_pair_strip(s, mid, d) -> tuple:
     n = len(s)
     s1 = list()
     k = 0
