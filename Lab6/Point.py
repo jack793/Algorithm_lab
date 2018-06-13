@@ -26,3 +26,7 @@ class Point(object):
 
     def y(self):
         return self._y
+
+    @staticmethod
+    def distance(p1, p2):
+        return pow(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2), 1 / 2)
