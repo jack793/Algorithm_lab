@@ -88,3 +88,19 @@ def closest_pair_strip(s, mid, d) -> tuple:
     s1 = list()
     k = 0
     for i in range(0, n):
+        if abs(s[i].x - mid) < d:
+            s1[k] = s[i]
+            k = k+1
+
+    d = inf
+    i = -1
+    j = -1
+    for u in range(0, k-1):
+        for v in range(u+1, min(u+3, n-1)):
+            if Point.distance(u, v) < d:
+                d = Point.distance(u, v)
+                i = u
+                j = v
+
+    return d, i, j
+
