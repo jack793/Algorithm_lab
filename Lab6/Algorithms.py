@@ -74,6 +74,7 @@ def fast_closest_pair(p, s):
 
         sl, sr = split(s, pl)
 
+        # fast_closest_pair returns a tuple, min checks first the distance
         (d, i, j) = min(fast_closest_pair(pl, sl), fast_closest_pair(pr, sr))
 
         x1 = (p[m - 1]).x
@@ -101,20 +102,22 @@ def closest_pair_strip(s: [Point], mid: float, d: float) -> tuple:
     :param s: vector in which points are ordered by their y coord
     :param mid: coord x of the vertical line which divide pl from pr
     :param d: minimum of distance between the minimum of distances in pl and those on ps
-    :return: (d,i,j) passed or a distance smaller between two points at the different extremities of mid and the two points
+    :return: (d,i,j) as smallest distance between two points within 1d from mid and the two points indexes
     """
     n = len(s)
     s1 = list()
-    k = 0
-    for i in range(0, n):
-        if abs(s[i].x - mid) < d:
-            s1[k] = s[i]
-            k = k + 1
+    for s_i in s:
+        if abs(s_i.x - mid) < d:
+            s1.append(s_i)
+    k = len(s1)
 
-    d = inf
-    i = -1
-    j = -1
-    for u in range(0, k - 1):
+    # s1 now contains only the points within 1d from the mid rect on the x axis
+
+    d, i, j = inf, -1, -1
+
+    # u iterates 0, ... , k - 2
+    for u in range(k - 1):
+        # v iterates u + 1, ... , min{u + 3, n - 1}
         for v in range(u + 1, min(u + 3, n - 1)):
             if Point.distance(u, v) < d:
                 d = Point.distance(u, v)
