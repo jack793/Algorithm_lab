@@ -1,4 +1,5 @@
 from math import inf, floor
+from typing import List, Any
 
 from Lab6.Cluster import *
 from Lab6.Point import *
@@ -66,3 +67,10 @@ def split(s, pl):
             sr.append(s[s_i])
 
     return sl, sr
+
+def closest_pair_strip(s, mid, d):
+    n = len(s)
+    s1 = list()
+    k = 0
+    for i in range(0, n):
+        
