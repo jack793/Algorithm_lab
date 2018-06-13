@@ -4,7 +4,13 @@ from Lab6.Cluster import *
 from Lab6.Point import *
 
 
-def hierarchical_clustering(p, k):
+def hierarchical_clustering(p: {Point}, k: int):
+    """
+    hierarchical_clustering algorithm
+    :param p: set of Points
+    :param k: number of required clusters
+    :return: a set containing the required number of clusters
+    """
     insieme = set()
     for point in p:
         c = Cluster({point})
@@ -77,7 +83,13 @@ def fast_closest_pair(p, s):
         return min((d, i, j), closest_pair_strip(s, mid, d))
 
 
-def split(s, pl):
+def split(s: {Point}, pl: {Point}):
+    """
+    Split the s vector in sl and sr
+    :param s: vector in which points are ordered by their y coord
+    :param pl: vector in which points are ordered by their x coord, containing only the left part of p
+    :return: sl(which contains all points in pl, but ordered by their y coord) and sr(which contains all points in pr, but ordered by their y coord)
+    """
     sl = list()
     sr = list()
 
@@ -91,6 +103,13 @@ def split(s, pl):
 
 
 def closest_pair_strip(s, mid, d) -> tuple:
+    """
+    Seek if there are points at the two different extremities of the line mid, which distance is < than d
+    :param s: vector in which points are ordered by their y coord
+    :param mid: coord x of the vertical line which divide pl from pr
+    :param d: minimum of distance between the minimum of distances in pl and those on ps
+    :return: (d,i,j) passed or a distance smaller between two points at the different extremities of mid and the two points
+    """
     n = len(s)
     s1 = list()
     k = 0
