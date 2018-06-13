@@ -1,3 +1,6 @@
+from math import inf
+
+
 class Point(object):
     def __init__(self, x, y) -> None:
         super().__init__()
@@ -29,7 +32,10 @@ class Point(object):
 
     @staticmethod
     def distance(p1, p2):
-        return pow(pow(p1.x() - p2.x(), 2) + pow(p1.y() - p2.y(), 2), 1 / 2)
+        if p1 is None or p2 is None:
+            return inf
+        else:
+            return pow(pow(p1.x() - p2.x(), 2) + pow(p1.y() - p2.y(), 2), 1 / 2)
 
 
 class County(Point):
@@ -58,5 +64,5 @@ class County(Point):
         return self._risk
 
     def __repr__(self):
-        return "(" + str(self._code) + ", " + str(self._x) + ", " + str(self._y) + ", " + str(self._pop) + ", " + str(self._risk) + ")\n"
-
+        return "(" + str(self._code) + ", " + str(self._x) + ", " + str(self._y) + ", " + str(self._pop) + ", " + str(
+            self._risk) + ")"

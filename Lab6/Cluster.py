@@ -55,22 +55,22 @@ class Cluster(object):
         :return: None
         """
         self._elements = self._elements.union(cluster.get_elements())
-        self._calculate_centroid()
 
     def _calculate_centroid(self):
         """
         Calculates the centroid of the cluster and updates the cache status
         """
 
-        sum_x = 0
-        sum_y = 0
+        if len(self.get_elements()) is not 0:
+            sum_x = 0
+            sum_y = 0
 
-        for i in self._elements:
-            sum_x += i.x()
-            sum_y += i.y()
+            for i in self._elements:
+                sum_x += i.x()
+                sum_y += i.y()
 
-        self._centroid = Point(sum_x / len(self._elements), sum_y / len(self._elements))
-        self._centroid_cached = True
+            self._centroid = Point(sum_x / len(self._elements), sum_y / len(self._elements))
+            self._centroid_cached = True
 
     def _calculate_error(self):
         """
@@ -82,5 +82,4 @@ class Cluster(object):
         self._error_cached = True
 
     def __repr__(self):
-        return "(" + str(self.get_elements()) + str(self.get_error()) + ")"
-
+        return "(" + str(self.get_elements()) + ": " + str(self.get_error()) + ")"

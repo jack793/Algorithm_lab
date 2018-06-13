@@ -1,5 +1,5 @@
 from math import inf, floor
-from random import randrange, shuffle
+from random import uniform, shuffle
 from Lab6.Cluster import *
 from Lab6.Point import *
 
@@ -45,10 +45,10 @@ def k_means_clustering(p: {Point}, k: int, q: int):
     shuffle(points)
 
     # creating k centers
-    max_x, min_x = max(p_i.x for p_i in p), min(p_i.x for p_i in p)
-    max_y, min_y = max(p_i.y for p_i in p), min(p_i.y for p_i in p)
+    max_x, min_x = max(p_i.x() for p_i in p), min(p_i.x() for p_i in p)
+    max_y, min_y = max(p_i.y() for p_i in p), min(p_i.y() for p_i in p)
 
-    center_list = [Point(randrange(max_x, min_x), randrange(max_y, min_y)) for _ in range(k)]
+    center_list = [Point(uniform(max_x, min_x), uniform(max_y, min_y)) for _ in range(k)]
 
     cluster_list = []
 
@@ -72,7 +72,8 @@ def k_means_clustering(p: {Point}, k: int, q: int):
 
         # UPDATE: recalculating cluster_set centroids for next iteration
         for f in range(k):
-            center_list[f] = cluster_list[f].get_centroid()
+            if cluster_list[f].get_centroid() is not None:
+                center_list[f] = cluster_list[f].get_centroid()
 
     return cluster_list
 
@@ -117,7 +118,6 @@ def fast_closest_pair(p, s):
 
         if dc < d:
             return dc, ic, jc
-
         else:
             return d, pi, pj
 
