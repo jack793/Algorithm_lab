@@ -54,19 +54,15 @@ def fast_closest_pair(p, s):
     if n <= 3:
         return slow_closest_pair(p)
 
-def split(s,pl):
-    n = len(s)
+
+def split(s, pl):
     sl = list()
     sr = list()
-    j = 0
-    k = 0
-    for i in range(0,n):
-        for q in pl:
-            if s[i] is pl[q]:
-                sl[j] = s[i]
-                j = j+1
-            else:
-                sr[k] = s[i]
-                k = k+1
+
+    for s_i in s:
+        if s_i in pl:
+            sl.append(s[s_i])
+        else:
+            sr.append(s[s_i])
 
     return sl, sr
