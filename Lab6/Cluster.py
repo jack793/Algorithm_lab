@@ -18,6 +18,10 @@ class Cluster(object):
         self._centroid_cached = False
         self._error_cached = False
 
+    def add_point(self, point):
+        self._elements.add(point)
+        self._calculate_centroid()
+
     def get_elements(self):
         """
         Returns the set of points of the cluster

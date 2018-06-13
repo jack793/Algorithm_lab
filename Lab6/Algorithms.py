@@ -11,22 +11,22 @@ def hierarchical_clustering(p: {Point}, k: int):
     :param k: number of required clusters
     :return: a set containing the required number of clusters
     """
-    insieme = set()
+    cluster_set = set()
     for point in p:
         c = Cluster({point})
-        insieme.add(c)
+        cluster_set.add(c)
 
-    while len(insieme) > k:
-        centroids = {c.get_centroid(): c for c in insieme}
+    while len(cluster_set) > k:
+        centroids = {c.get_centroid(): c for c in cluster_set}
         _, i, j = fast_closest_pair(
             list(sorted(centroids.keys(), key=lambda p_i: p_i.x())),
             list(sorted(centroids.keys(), key=lambda p_i: p_i.y())))
 
         ci, cj = centroids[i], centroids[j]
         ci.union(cj)
-        insieme.remove(cj)
+        cluster_set.remove(cj)
 
-    return insieme
+    return cluster_set
 
 
 def k_means_clustering(p: {Point}, k: int, q: int):
@@ -34,18 +34,40 @@ def k_means_clustering(p: {Point}, k: int, q: int):
     K means clustering algorithm
     :param p: set of Points
     :param k: number of required clusters
-    :param q: number of interactions
-    :return:
+    :param q: number of iterations
+    :return: cluster_set from p
     """
-    c = {Cluster({p_i}) for p_i in p}
+    n = len(p)
 
-    # test if the number of clusters is larger than the size of set of points
-    if k >= len(p):
-        return c
+    # creating k centers
+    centers = [p[i][0] for i in range(k)]
 
-    for iteration in range(q):
-        # TODO continue
-        pass
+    cluster_set = []
+
+    # INITIALIZATION: creating k empty cluster
+    for i in range(q):
+        cluster_set = [Cluster(set()) for _ in range(k)]
+
+        # ASSIGNMENT: finally, add current point to the best cluster
+        for j in range(n):
+            # for each point..
+            min_d = inf
+            closest_c = None
+            for c in range(k):
+                # ..searching for closest center to current point
+                d = Point.distance(centers[c], p[j])
+                if d < min_d:
+                    min_d = d
+                    closest_c = c
+
+            cluster_set[closest_c].add_point(p[j])
+
+        # UPDATE: recalculating cluster_set centroids for next iteration
+        for f in range(k):
+            if cluster_set[f].get_centroid() is not None:
+                centers[f] = cluster_set[f].get_centroid()
+
+    return cluster_set
 
 
 def slow_closest_pair(p: [Point]):
