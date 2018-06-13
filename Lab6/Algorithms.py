@@ -1,4 +1,4 @@
-from math import floor
+from math import inf, floor
 
 from Lab6.Cluster import *
 from Lab6.Point import *
