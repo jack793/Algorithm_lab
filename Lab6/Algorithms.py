@@ -43,11 +43,11 @@ def slow_closest_pair(p: [Point]):
     """
     Returns the indexes of the two closest clusters and the distance between the two
     :param p - list of Points
-    :return: (i1, i2, d) - where i1 and i2 are the indexes of the two points and d is the distance between them
+    :return: (d, i1, i2) - where d is the distance between them and i1 and i2 are the indexes of the two points
     """
     tuples = {(i1, i2) for i1 in range(len(p)) for i2 in range(len(p)) if i1 is not i2}
     i1, i2 = min(tuples, key=lambda t: Point.distance(p[t[0]], p[t[1]]))
-    return i1, i2, Point.distance(p[i1], p[i2])
+    return Point.distance(p[i1], p[i2]), i1, i2
 
 
 def fast_closest_pair(p, s):
