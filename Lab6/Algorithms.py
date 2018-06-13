@@ -1,5 +1,5 @@
 from math import inf, floor
-
+from random import randrange, shuffle
 from Lab6.Cluster import *
 from Lab6.Point import *
 
@@ -35,39 +35,46 @@ def k_means_clustering(p: {Point}, k: int, q: int):
     :param p: set of Points
     :param k: number of required clusters
     :param q: number of iterations
-    :return: cluster_set from p
+    :return: set of Clusters
     """
-    n = len(p)
+
+    assert k > 0
+    assert q > 0
+
+    points = list(p)
+    shuffle(points)
 
     # creating k centers
-    centers = [p[i][0] for i in range(k)]
+    max_x, min_x = max(p_i.x for p_i in p), min(p_i.x for p_i in p)
+    max_y, min_y = max(p_i.y for p_i in p), min(p_i.y for p_i in p)
 
-    cluster_set = []
+    center_list = [Point(randrange(max_x, min_x), randrange(max_y, min_y)) for _ in range(k)]
+
+    cluster_list = []
 
     # INITIALIZATION: creating k empty cluster
-    for i in range(q):
-        cluster_set = [Cluster(set()) for _ in range(k)]
+    for iteration in range(q):
+        cluster_list = [Cluster(set()) for _ in range(k)]
 
         # ASSIGNMENT: finally, add current point to the best cluster
-        for j in range(n):
+        for j in points:
             # for each point..
             min_d = inf
             closest_c = None
             for c in range(k):
                 # ..searching for closest center to current point
-                d = Point.distance(centers[c], p[j])
+                d = Point.distance(center_list[c], j)
                 if d < min_d:
                     min_d = d
                     closest_c = c
 
-            cluster_set[closest_c].add_point(p[j])
+            cluster_list[closest_c].add_point(j)
 
         # UPDATE: recalculating cluster_set centroids for next iteration
         for f in range(k):
-            if cluster_set[f].get_centroid() is not None:
-                centers[f] = cluster_set[f].get_centroid()
+            center_list[f] = cluster_list[f].get_centroid()
 
-    return cluster_set
+    return cluster_list
 
 
 def slow_closest_pair(p: [Point]):

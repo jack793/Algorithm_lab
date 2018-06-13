@@ -10,7 +10,6 @@ class Cluster(object):
         """
         :param: elements: set of points to insert in the cluster
         """
-        assert len(elements) > 0
         self._elements = elements  # array of tuple of points (xi,yi)
         self._centroid = None  # variable that contains the Point of the centroid
         self._error = None  # variable that contains the error of the cluster
@@ -20,7 +19,8 @@ class Cluster(object):
 
     def add_point(self, point):
         self._elements.add(point)
-        self._calculate_centroid()
+        self._centroid_cached = False
+        self._error_cached = False
 
     def get_elements(self):
         """
