@@ -1,3 +1,5 @@
+from matplotlib import pyplot as plt, cm
+from Lab6.Algorithms import *
 import csv
 
 from Lab6.Algorithms import *
