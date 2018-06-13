@@ -62,8 +62,8 @@ class Cluster(object):
         sum_y = 0
 
         for i in self._elements:
-            sum_x += i.x
-            sum_y += i.y
+            sum_x += i.x()
+            sum_y += i.y()
 
         self._centroid = Point(sum_x / len(self._elements), sum_y / len(self._elements))
         self._centroid_cached = True

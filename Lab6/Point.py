@@ -29,4 +29,34 @@ class Point(object):
 
     @staticmethod
     def distance(p1, p2):
-        return pow(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2), 1 / 2)
+        return pow(pow(p1.x() - p2.x(), 2) + pow(p1.y() - p2.y(), 2), 1 / 2)
+
+
+class County(Point):
+
+    def __init__(self, c, x, y, p, r) -> None:
+        """
+
+        :param c: County Code
+        :param x: Coord x
+        :param y: Coord y
+        :param p: Population
+        :param r: Risk of Cancer
+        """
+        super().__init__(x, y)
+        self._code = c
+        self._pop = p
+        self._risk = r
+
+    def code(self):
+        return self._code
+
+    def population(self):
+        return self._pop
+
+    def risk(self):
+        return self._risk
+
+    def __repr__(self):
+        return "(" + self._code + ", " + self._x + ", " + self._y + ", " + self._pop + ", " + self._risk + ")\n"
+
