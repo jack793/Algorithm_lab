@@ -50,6 +50,13 @@ def slow_closest_pair(p: [Point]):
 
 
 def fast_closest_pair(p, s):
+    """
+
+    :param p: clusters
+    :param s: vector contains indexes of points ordered by y coordinate
+    :return: (d, i, j) tuple where d is the smallest distance btw couple of points in s in vertical strip [mid-d, mid+d]
+        and i,j indexes of this two points
+    """
     n = len(p)
     if n <= 3:
         return slow_closest_pair(p)
@@ -90,17 +97,16 @@ def closest_pair_strip(s, mid, d) -> tuple:
     for i in range(0, n):
         if abs(s[i].x - mid) < d:
             s1[k] = s[i]
-            k = k+1
+            k = k + 1
 
     d = inf
     i = -1
     j = -1
-    for u in range(0, k-1):
-        for v in range(u+1, min(u+3, n-1)):
+    for u in range(0, k - 1):
+        for v in range(u + 1, min(u + 3, n - 1)):
             if Point.distance(u, v) < d:
                 d = Point.distance(u, v)
                 i = u
                 j = v
 
     return d, i, j
-
