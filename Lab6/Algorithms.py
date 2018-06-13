@@ -38,19 +38,15 @@ def k_means_clustering(p: {Point}, k: int, q: int):
         pass
 
 
-def slow_closest_pair(p):
-    min_distance = inf
-    nearest_points = None  # tuple (i,j) point coordinates
-
-    for pu, i in enumerate(p):
-        for pv, j in enumerate(p):
-            if pv > pu:
-                distance = Point.distance(i.x, j.x)
-                if distance < min_distance:  # smaller distance between pairs of points (i,j)
-                    min_distance = distance
-                    nearest_points = (i, j)
-
-    return min_distance, nearest_points.x, nearest_points.y
+def slow_closest_pair(p: [Point]):
+    """
+    Returns the indexes of the two closest clusters and the distance between the two
+    :param p - list of Points
+    :return: (i1, i2, d) - where i1 and i2 are the indexes of the two points and d is the distance between them
+    """
+    tuples = {(i1, i2) for i1 in range(len(p)) for i2 in range(len(p)) if i1 is not i2}
+    i1, i2 = min(tuples, key=lambda t: Point.distance(p[t[0]], p[t[1]]))
+    return i1, i2, Point.distance(p[i1], p[i2])
 
 
 def fast_closest_pair(p, s):
