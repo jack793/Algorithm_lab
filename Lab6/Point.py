@@ -58,5 +58,5 @@ class County(Point):
         return self._risk
 
     def __repr__(self):
-        return "(" + self._code + ", " + self._x + ", " + self._y + ", " + self._pop + ", " + self._risk + ")\n"
+        return "(" + str(self._code) + ", " + str(self._x) + ", " + str(self._y) + ", " + str(self._pop) + ", " + str(self._risk) + ")\n"
 

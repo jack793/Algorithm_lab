@@ -80,3 +80,7 @@ class Cluster(object):
         """
         self._error = sum(map(lambda p: pow(Point.distance(p, self.get_centroid()), 2), self._elements))
         self._error_cached = True
+
+    def __repr__(self):
+        return "(" + str(self.get_elements()) + str(self.get_error()) + ")"
+

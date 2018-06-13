@@ -106,7 +106,13 @@ def fast_closest_pair(p, s):
         x2 = (p[m]).x()
         mid = (x1 + x2) / 2
 
-        return min((d, pi, pj), closest_pair_strip(s, mid, d))
+        (dc, ic, jc) = closest_pair_strip(s, mid, d)
+
+        if dc < d:
+            return dc, ic, jc
+
+        else:
+            return d, pi, pj
 
 
 def split(s: [Point], pl: [Point]):
@@ -129,7 +135,7 @@ def closest_pair_strip(s: [Point], mid: float, d: float) -> tuple:
     :param d: minimum of distance between the minimum of distances in pl and those on ps
     :return: (d,i,j) as smallest distance between two points within 1d from mid and the two points
     """
-    n = len(s)
+
     s1 = list(filter(lambda s_i: abs(s_i.x() - mid) < d, s))
     k = len(s1)
 
@@ -140,7 +146,7 @@ def closest_pair_strip(s: [Point], mid: float, d: float) -> tuple:
     # u iterates 0, ... , k - 2
     for u in range(k - 1):
         # v iterates u + 1, ... , min{u + 3, n - 1}
-        for v in range(u + 1, min(u + 3, n - 1) + 1):
+        for v in range(u + 1, min(u + 3, k - 1) + 1):
             if Point.distance(s1[u], s1[v]) < d:
                 d, i, j = Point.distance(s1[u], s1[v]), s1[u], s1[v]
 
