@@ -83,26 +83,19 @@ def fast_closest_pair(p, s):
         return min((d, i, j), closest_pair_strip(s, mid, d))
 
 
-def split(s: {Point}, pl: {Point}):
+def split(s: [Point], pl: [Point]):
     """
     Split the s vector in sl and sr
     :param s: vector in which points are ordered by their y coord
     :param pl: vector in which points are ordered by their x coord, containing only the left part of p
     :return: sl(which contains all points in pl, but ordered by their y coord) and sr(which contains all points in pr, but ordered by their y coord)
     """
-    sl = list()
-    sr = list()
-
-    for s_i in s:
-        if s_i in pl:
-            sl.append(s[s_i])
-        else:
-            sr.append(s[s_i])
-
+    sl = filter(lambda s_i: s_i in pl, s)
+    sr = filter(lambda s_i: s_i not in pl, s)
     return sl, sr
 
 
-def closest_pair_strip(s, mid, d) -> tuple:
+def closest_pair_strip(s: [Point], mid: float, d: float) -> tuple:
     """
     Seek if there are points at the two different extremities of the line mid, which distance is < than d
     :param s: vector in which points are ordered by their y coord
