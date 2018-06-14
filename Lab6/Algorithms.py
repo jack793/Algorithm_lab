@@ -45,11 +45,8 @@ def k_means_clustering(p: {Point}, k: int, q: int):
     shuffle(points)
 
     # creating k centers
-    max_x, min_x = max(p_i.x() for p_i in p), min(p_i.x() for p_i in p)
-    max_y, min_y = max(p_i.y() for p_i in p), min(p_i.y() for p_i in p)
 
-    center_list = [Point(uniform(max_x, min_x), uniform(max_y, min_y)) for _ in range(k)]
-
+    center_list = points[0:k]
     cluster_list = []
 
     # INITIALIZATION: creating k empty cluster

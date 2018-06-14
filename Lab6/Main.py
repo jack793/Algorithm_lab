@@ -1,19 +1,16 @@
+import csv
 from math import log
 
-from matplotlib import pyplot as plt, cm
-from numpy import linspace
-
-from Lab6.Algorithms import *
-import csv
+from matplotlib import pyplot as plt
 
 from Lab6.Algorithms import *
 
-with open("unifiedCancerData/unifiedCancerData_111.csv", "r") as csv_file:
+with open("unifiedCancerData/unifiedCancerData_896.csv", "r") as csv_file:
     reader = csv.reader(csv_file, delimiter=",")
     points = set()
-    # for row in reader:
-    #     points.add(County(int(row[0]), float(row[1]), float(row[2]), int(row[3]), float(row[4])))
-    #
+    for row in reader:
+        points.add(County(int(row[0]), float(row[1]), float(row[2]), int(row[3]), float(row[4])))
+
     # print(hierarchical_clustering(points, 15))
     # print(k_means_clustering(points, 15, 100))
 
@@ -43,21 +40,33 @@ with open("unifiedCancerData/unifiedCancerData_111.csv", "r") as csv_file:
     # change the limits/aspect.  We don't need this step in this case.
     ax.set(xlim=[0, width], ylim=[height, 0], aspect=1)
 
+    res = hierarchical_clustering(points, 15)
+    # res = k_means_clustering(points, 15, 100)
+
+    map_img = plt.imread("map/USA_Counties.png")
+    im_plot = plt.imshow(map_img)
     xs = list()
     ys = list()
     ps = list()
     rs = list()
+    colours_list = list()
+    centroids_list = list()
 
-    for row in reader:
-        xs.append(float(row[1]))
-        ys.append(float(row[2]))
-        ps.append(log(float(row[3])) / 5)
-        rs.append(float(row[4]))
+    i = 0
+    for c in res:
+        i += 1
+        xs += list(map(lambda p: p.x(), c.get_elements()))
+        ys += list(map(lambda p: p.y(), c.get_elements()))
+        ps += list(map(lambda p: p.population(), c.get_elements()))
+        rs += list(map(lambda p: p.risk(), c.get_elements()))
+        colours_list += [i for _ in c.get_elements()]
+        centroids_list.append(c.get_centroid())
 
-    plt.scatter(x=xs, y=ys, s=ps)
-    # fig.savefig('graph.png', dpi=dpi, transparent=True)
+    # Change ps scale
+    ps = list(map(lambda p_i: log(p_i) * 3, ps))
+    plt.scatter(x=xs, y=ys, s=ps, c=colours_list)
+    plt.scatter(x=list(map(lambda c_i: c_i.get_centroid().x(), res)),
+                y=list(map(lambda c_i: c_i.get_centroid().y(), res)),
+                s=100, c='r')
+
     plt.show()
-
-
-    # print(hierarchical_clustering(points, 15))
-    # print(k_means_clustering(points, 15, 100))
