@@ -55,6 +55,8 @@ class Cluster(object):
         :return: None
         """
         self._elements = self._elements.union(cluster.get_elements())
+        self._centroid_cached = False
+        self._error_cached = False
 
     def _calculate_centroid(self):
         """

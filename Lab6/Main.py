@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 from Lab6.Algorithms import *
 
-with open("unifiedCancerData/unifiedCancerData_896.csv", "r") as csv_file:
+with open("unifiedCancerData/unifiedCancerData_111.csv", "r") as csv_file:
     reader = csv.reader(csv_file, delimiter=",")
     points = set()
     for row in reader:
