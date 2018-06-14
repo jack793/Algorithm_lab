@@ -1,10 +1,17 @@
-## -Efficienza dei metodi-
-### Domanda (1) e (2)
+# Laboratorio 6 - Clustering di dati medici
+
+## Efficienza dei metodi
+### Domanda (1)
 #### HierarchicalClustering
+
+HierarchicalClustering su **unifiedCancerData_3108** con 15 cluster
 
 ![domanda1.png](domanda1.png)
 
+### Domanda (2)
 #### K-MeansClustering
+
+K-MeansClustering su **unifiedCancerData_3108** con 15 cluster e 5 iterazioni
 
 ![domanda2.png](domanda2.png)
 
@@ -22,13 +29,19 @@ Di conseguenza il tempo asintotico totale di clustering gerarchico diventa **O(n
 
 È facile concludere che il metodo di clustering più veloce, quando il numero dei cluster in output è molto piccolo, è sicuramente **K-Means**. 
 
-## -Automazione dei metodi-
-### Domanda (4) e (5)
+## Automazione dei metodi
+### Domanda (4)
 #### HierarchicalClustering
+
+HierarchicalClustering su **unifiedCancerData_111** con 9 cluster
+
 
 ![domanda4.png](domanda4.png)
 
+### Domanda (5)
 #### K-MeansClustering
+
+K-MeansClustering su **unifiedCancerData_111** con 9 cluster e 5 interazioni
 
 ![domanda5.png](domanda5.png)
 
@@ -38,7 +51,6 @@ Di conseguenza il tempo asintotico totale di clustering gerarchico diventa **O(n
 |:---:|:---:|
 | Hierarchical Clustering | 2.251 x 10^11 |
 | K-means | 2.814 x 10^11|
-
 
 ### Domanda (7)
 
@@ -52,11 +64,10 @@ HierarchicalClustering, d'altro canto, non dipende dalla popolazione delle singo
 
 Possiamo affermare che, tra i due algoritmi di clustering in analisi, **K-MeansClustering** richiede sicuramente una maggiore supervisione umana. Questo poichè è necessario fare un calcolo a priori sul corretto numero q di iterazioni che permetta all'algoritmo di generare un insieme di cluster con una dispersione più bassa possibile. Sarebbe, però, possibile automatizzare tale procedura adottando un metodo di minimalizzazione su q, finché non si ottenga un valore minimo di distorsione. Al contrario **HierarchicalClustering** non ha bisogno di tale supervisione, visto che ottiene un risultato ottimale, ma con dei tempi d'esecuzione nettamente più elevati (come anche la sua complessità).
 
-## -Qualità dei metodi-
+## Qualità dei metodi
 ### Domanda (9)
 
-Possiamo notare come con l'aumentare del numero di cluster la distorsione diminuisca per entrambi gli algoritmi utilizzati,
-inoltre i due algoritmi tendono a dare risulati sempre più vicini.
+Possiamo notare come con l'aumentare del numero di cluster la distorsione diminuisca per entrambi gli algoritmi utilizzati, inoltre i due algoritmi tendono a dare risulati sempre più vicini man mano che il numero di cluster aumenta
 
 ![domanda9_111.png](domanda9_111.png)
 ![domanda9_290.png](domanda9_290.png)
@@ -66,7 +77,7 @@ inoltre i due algoritmi tendono a dare risulati sempre più vicini.
 
 Prendendo in considerazione l'insieme di dati **unifiedCancerData_111** si può notare che la distorsione prodotta da K-MeansClustering è superiore a quella prodotta da HierarchicalClustering per tutti i 15 gruppi di cluster richiesti.
 
-Per quanto riguarda **unifiedCancerData_290** la distorsione prodotta da K-Means risulta invece inferiore rispetto a quella della controparte, se si prendono in considerazione i cluster 6, 8, 9 e 10. Se si considerano i restanti cluster l'andamento della distorsione di K-Means è lievemente maggiore.
+Per quanto riguarda **unifiedCancerData_290** la distorsione prodotta da K-Means risulta invece inferiore rispetto a quella della controparte, se si prendono in considerazione 6, 8, 9 e 10 cluster. Se, invece, si considerano i restanti casi l'andamento della distorsione di K-Means è maggiore.
 
 Infine, nel set di dati **unifiedCancerData_896** è presente una netta differenza fra le due distorsioni: nei risultati con 7, 8, 9, 10, 11, 12 e 13 cluster la distorsione di K-MeansClustering è evidentemente minore. Da 14 cluster a 20 (ed anche con 6 cluster) le due curve sono pressoché identiche.
 
