@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 from Lab6.Algorithms import *
 
-with open("unifiedCancerData/unifiedCancerData_111.csv", "r") as csv_file:
+with open("unifiedCancerData/unifiedCancerData_896.csv", "r") as csv_file:
     reader = csv.reader(csv_file, delimiter=",")
     points = list()
     for row in reader:
@@ -76,8 +76,18 @@ with open("unifiedCancerData/unifiedCancerData_111.csv", "r") as csv_file:
 
     plt.show()
 
-    # hierarchical_errors = list(map(lambda cluster: cluster.get_error(), hierarchical_clustering(points, 9)))
-    # k_means_errors = list(map(lambda cluster: cluster.get_error(), k_means_clustering(points, 9, 5)))
-    #
-    # print("DIST HIERARCHICAL:", sum(hierarchical_errors))
-    # print("DIST K MEANS:", sum(k_means_errors))
+    print("DIST HIERARCHICAL:", sum(map(lambda cluster: cluster.get_error(), hierarchical_clustering(points, 16))))
+    print("DIST K MEANS:", sum(map(lambda cluster: cluster.get_error(), k_means_clustering(points, 16, 5))))
+
+    hierarchical_dist = [sum(map(lambda cluster: cluster.get_error(), hierarchical_clustering(points, i))) for i in
+                         range(6, 21)]
+    k_means_dist = [sum(map(lambda cluster: cluster.get_error(), k_means_clustering(points, i, 5))) for i in
+                    range(6, 21)]
+
+    plt.plot(list(range(6, 21)), hierarchical_dist, c='r')
+    plt.plot(list(range(6, 21)), k_means_dist, c='b')
+    plt.xlabel("Number of clusters")
+    plt.ylabel("Distortion")
+    plt.legend(["HierarchicalClustering distortion", "K-Means distortion"])
+    plt.title("unifiedCancerData_896")
+    plt.show()
