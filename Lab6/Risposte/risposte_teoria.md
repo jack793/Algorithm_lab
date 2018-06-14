@@ -42,8 +42,11 @@ Di conseguenza il tempo asintotico totale di clustering gerarchico diventa **O(n
 
 ### Domanda (7)
 
-Osservando i cluster generati lungo la costa occidentale degli Stati Uniti, possiamo notare come la disposizione delle contee rispetto al centro del cluster sia differente: in quelli ottenuti con **HierarchicalClustering** i punti sono più raggruppati, portando ad una distorsione nettamente minore rispetto a quelli ottenuti con **K-MeansClustering** (almeno in 2 dei 3 cluster presi in esame). Tale diversità é da imputare alla diversa scelta eseguita durante l'inizializzazione, in particolare K-MeansClustering utilizza le contee più popolose come punto iniziale dei primi cluster, mentre HierarchicalClustering non dipende da questo parametro; il clustering gerarchico, invece, inizia raggruppando fra loro le contee più vicine.
-Può quindi capitare che due contee molto popolose e vicine risultino in cluster separati utilizzano il secondo algoritmo, come si può ben vedere dal grafico generato.
+Osservando i cluster generati lungo la costa occidentale degli Stati Uniti, possiamo notare come la disposizione delle contee, rispetto al centro del cluster, sia differente: in quelli ottenuti con **HierarchicalClustering** i punti sono più raggruppati, con una distorsione nettamente minore rispetto a quelli ottenuti con **K-MeansClustering** (per quanto riguarda almeno 2 dei 3 cluster presi in esame). 
+
+Tale diversità é da imputare alla diversa scelta eseguita durante l'inizializzazione. In particolare **K-MeansClustering** utilizza le contee più popolose come punto iniziale dei primi cluster: queste contee sono molto vicine tra di loro e concentrate tutte nella parte sud. Poiché sono presenti anche abbastanza contee nella parte settentrionale, l'algoritmo sposta la posizione del centroide verso l'alto nel corso di ogni iterazione. All'inizio quindi le contee saranno abbastanza lontane dai rispettivi centroidi e 5 iterazioni non sono sufficienti ad abbassare la distorsione, la quale si avvicina solamente a quella prodotta dalla controparte gerarchica.
+
+HierarchicalClustering, d'altro canto, non dipende dalla popolazione delle singole contee per la creazione dei primi cluster. Esso, infatti, inizia a formare i cluster inserendo al loro interno solamente una contea e procede nella sua esecuzione raggruppando fra loro cluster aventi il centroide più vicino. La disposizione spaziale di questi cluster risulterà più uniforme e meno allungata, ma può verificarsi il caso in cui due contee molto popolose, ma vicine fra loro, siano inserite all'interno dello stesso cluster.
 
 ### Domanda (8)
 
@@ -61,4 +64,10 @@ inoltre i due algoritmi tendono a dare risulati sempre più vicini.
 
 ### Domanda (10)
 
+Domanda 10
+Prendendo in considerazione l'insieme di dati unifiedCancerData_111 si può notare che la distorsione prodotta da K-MeansClustering è superiore a quella prodotta da HierarchicalClustering per tutti i 15 gruppi di cluster richiesti.
+
+Per quanto riguarda unifiedCancerData_290 la distorsione prodotta da K-Means risulta invece inferiore rispetto a quella della controparte, se si prendono in considerazione i cluster 6, 8, 9 e 10. Se si considerano i restanti cluster l'andamento della distorsione di K-Means è lievemente maggiore.
+
+Infine, nel set di dati unifiedCancerData_896 è presente una netta differenza fra le due distorsioni: nei risultati con 7, 8, 9, 10, 11, 12 e 13 cluster la distorsione di K-MeansClustering è evidentemente minore. Da 14 cluster a 20 (ed anche con 6 cluster) le due curve sono pressoché identiche.
 
