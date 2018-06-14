@@ -1,7 +1,8 @@
-from math import inf, floor
-from random import uniform, shuffle
 from Lab6.Cluster import *
 from Lab6.Point import *
+
+from math import floor
+from random import shuffle
 
 
 def hierarchical_clustering(p: {Point}, k: int):
@@ -29,10 +30,10 @@ def hierarchical_clustering(p: {Point}, k: int):
     return cluster_set
 
 
-def k_means_clustering(p: {Point}, k: int, q: int):
+def k_means_clustering(points: [Point], k: int, q: int):
     """
     K means clustering algorithm
-    :param p: set of Points
+    :param points: list of Points ordered by population
     :param k: number of required clusters
     :param q: number of iterations
     :return: set of Clusters
@@ -41,11 +42,7 @@ def k_means_clustering(p: {Point}, k: int, q: int):
     assert k > 0
     assert q > 0
 
-    points = list(p)
-    shuffle(points)
-
-    # creating k centers
-
+    # creating k initial centers
     center_list = points[0:k]
     cluster_list = []
 

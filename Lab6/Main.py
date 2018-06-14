@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 
 from Lab6.Algorithms import *
 
-with open("unifiedCancerData/unifiedCancerData_111.csv", "r") as csv_file:
+with open("unifiedCancerData/unifiedCancerData_3108.csv", "r") as csv_file:
     reader = csv.reader(csv_file, delimiter=",")
     points = set()
     for row in reader:
@@ -40,8 +40,9 @@ with open("unifiedCancerData/unifiedCancerData_111.csv", "r") as csv_file:
     # change the limits/aspect.  We don't need this step in this case.
     ax.set(xlim=[0, width], ylim=[height, 0], aspect=1)
 
-    res = hierarchical_clustering(points, 15)
-    # res = k_means_clustering(points, 15, 100)
+    # CHOOSE THE ALGORITHM HERE
+    # res = hierarchical_clustering(points, 15)
+    res = k_means_clustering(sorted(points, key=lambda p: p.population()), 15, 5)
 
     map_img = plt.imread("map/USA_Counties.png")
     im_plot = plt.imshow(map_img)
@@ -64,9 +65,13 @@ with open("unifiedCancerData/unifiedCancerData_111.csv", "r") as csv_file:
 
     # Change ps scale
     ps = list(map(lambda p_i: log(p_i) * 3, ps))
+    for c in res:
+        for e in c.get_elements():
+            plt.plot((c.get_centroid().x(), e.x()), (c.get_centroid().y(), e.y()),
+                     linestyle='-', c='#FF000066', linewidth=0.5)
     plt.scatter(x=xs, y=ys, s=ps, c=colours_list)
     plt.scatter(x=list(map(lambda c_i: c_i.get_centroid().x(), res)),
                 y=list(map(lambda c_i: c_i.get_centroid().y(), res)),
-                s=100, c='r')
+                s=50, marker="*", c="k", zorder=10)
 
     plt.show()
