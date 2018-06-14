@@ -64,9 +64,9 @@ inoltre i due algoritmi tendono a dare risulati sempre più vicini.
 
 ### Domanda (10)
 
-Prendendo in considerazione l'insieme di dati unifiedCancerData_111 si può notare che la distorsione prodotta da K-MeansClustering è superiore a quella prodotta da HierarchicalClustering per tutti i 15 gruppi di cluster richiesti.
+Prendendo in considerazione l'insieme di dati **unifiedCancerData_111** si può notare che la distorsione prodotta da K-MeansClustering è superiore a quella prodotta da HierarchicalClustering per tutti i 15 gruppi di cluster richiesti.
 
-Per quanto riguarda unifiedCancerData_290 la distorsione prodotta da K-Means risulta invece inferiore rispetto a quella della controparte, se si prendono in considerazione i cluster 6, 8, 9 e 10. Se si considerano i restanti cluster l'andamento della distorsione di K-Means è lievemente maggiore.
+Per quanto riguarda **unifiedCancerData_290** la distorsione prodotta da K-Means risulta invece inferiore rispetto a quella della controparte, se si prendono in considerazione i cluster 6, 8, 9 e 10. Se si considerano i restanti cluster l'andamento della distorsione di K-Means è lievemente maggiore.
 
-Infine, nel set di dati unifiedCancerData_896 è presente una netta differenza fra le due distorsioni: nei risultati con 7, 8, 9, 10, 11, 12 e 13 cluster la distorsione di K-MeansClustering è evidentemente minore. Da 14 cluster a 20 (ed anche con 6 cluster) le due curve sono pressoché identiche.
+Infine, nel set di dati **unifiedCancerData_896** è presente una netta differenza fra le due distorsioni: nei risultati con 7, 8, 9, 10, 11, 12 e 13 cluster la distorsione di K-MeansClustering è evidentemente minore. Da 14 cluster a 20 (ed anche con 6 cluster) le due curve sono pressoché identiche.
 
