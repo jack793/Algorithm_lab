@@ -1,6 +1,12 @@
 ## -Efficienza dei metodi-
 ### Domanda (1) e (2)
-Riferirsi alle immagini
+#### HierarchicalClustering
+
+![domanda1.png](domanda1.png)
+
+#### K-MeansClustering
+
+![domanda2.png](domanda2.png)
 
 ### Domanda (3)
 #### - Complessità:
@@ -17,8 +23,14 @@ Di conseguenza il tempo asintotico totale di clustering gerarchico diventa **O(n
 È facile concludere che il metodo di clustering più veloce, quando il numero dei cluster in output è molto piccolo, è sicuramente **K-Means**. 
 
 ## -Automazione dei metodi-
-### Domanda (3) e (4)
-Riferirsi alle immagini
+### Domanda (4) e (5)
+#### HierarchicalClustering
+
+![domanda4.png](domanda4.png)
+
+#### K-MeansClustering
+
+![domanda5.png](domanda5.png)
 
 ### Domanda (6)
 
@@ -40,7 +52,12 @@ Possiamo affermare che, tra i due algoritmi di clustering in analisi, **K-MeansC
 ## -Qualità dei metodi-
 ### Domanda (9)
 
-Riferirsi alle immagini
+Possiamo notare come con l'aumentare del numero di cluster la distorsione diminuisca per entrambi gli algoritmi utilizzati,
+inoltre i due algoritmi tendono a dare risulati sempre più vicini.
+
+![domanda9_111.png](domanda9_111.png)
+![domanda9_290.png](domanda9_290.png)
+![domanda9_896.png](domanda9_896.png)
 
 ### Domanda (10)
 
