@@ -17,10 +17,10 @@ K-MeansClustering su **unifiedCancerData_3108** con 15 cluster e 5 iterazioni
 
 ### Domanda (3)
 #### - Complessità:
-Consideriamo solo un piccola frazione dei punti n totali nel dataset ed assumiamo che l'algoritmo **HierarchicalClustering**
-utilizzi solo **FastClosestPair**.
-Quest'ultimo ha complessità **O(n log(n))** perciò l'algoritmo del clustering gerarchico avrà una complessità totale **O((n-k)(n log(n)))** dovendo produrre k cluster.
-L'algoritmo di clustering **K-Means** invece, dovendo creare k cluster con al massimo q interazioni, ha una complessità dell'ordine **O(q n k)** .
+Consideriamo una frazione dei punti n totali nel dataset ed assumiamo che l'algoritmo **HierarchicalClustering**
+utilizzi solo **FastClosestPair** su di essi.
+Questo ha complessità **O(n log(n))**, perciò l'algoritmo del clustering gerarchico avrà una complessità totale **O((n-k)(n log(n)))** , dovendo produrre k cluster.
+L'algoritmo di clustering **K-Means** invece, crea k cluster con al massimo q interazioni ciascuno, avrà quindi una complessità dell'ordine **O(q n k)**. In realtà è possibile dimostrare che la smoothed complexity di K-Means è polinomiale, spiegando, quindi, la più bassa complessità di questo algoritmo.
 
 #### - Tempi asintotici d'esecuzione:
 Dal punto di vista dei tempi asintotici, assumendo che **K-Means** utilizzi sempre un numero piccolo di interazioni q, si può approssimare il tempo asintotico ad un'**esecuzione lineare** sul numero dei punti n. Per quanto riguarda l'algoritmo 
