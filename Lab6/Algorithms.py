@@ -14,7 +14,7 @@ def hierarchical_clustering(p: {Point}, k: int):
     """
     cluster_set = set()
     for point in p:
-        c = Cluster({point})
+        c = CountyCluster({point})
         cluster_set.add(c)
 
     while len(cluster_set) > k:
@@ -48,7 +48,7 @@ def k_means_clustering(points: [Point], k: int, q: int):
 
     # INITIALIZATION: creating k empty cluster
     for iteration in range(q):
-        cluster_list = [Cluster(set()) for _ in range(k)]
+        cluster_list = [CountyCluster(set()) for _ in range(k)]
 
         # ASSIGNMENT: finally, add current point to the best cluster
         for j in points:

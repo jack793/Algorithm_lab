@@ -5,14 +5,11 @@ from matplotlib import pyplot as plt
 
 from Lab6.Algorithms import *
 
-with open("unifiedCancerData/unifiedCancerData_3108.csv", "r") as csv_file:
+with open("unifiedCancerData/unifiedCancerData_290.csv", "r") as csv_file:
     reader = csv.reader(csv_file, delimiter=",")
-    points = set()
+    points = list()
     for row in reader:
-        points.add(County(int(row[0]), float(row[1]), float(row[2]), int(row[3]), float(row[4])))
-
-    # print(hierarchical_clustering(points, 15))
-    # print(k_means_clustering(points, 15, 100))
+        points.append(County(int(row[0]), float(row[1]), float(row[2]), int(row[3]), float(row[4])))
 
     # On-screen, things will be displayed at 80dpi regardless of what we set here
     # This is effectively the dpi for the saved figure. We need to specify it,
@@ -41,8 +38,8 @@ with open("unifiedCancerData/unifiedCancerData_3108.csv", "r") as csv_file:
     ax.set(xlim=[0, width], ylim=[height, 0], aspect=1)
 
     # CHOOSE THE ALGORITHM HERE
-    # res = hierarchical_clustering(points, 15)
-    res = k_means_clustering(sorted(points, key=lambda p: p.population()), 15, 5)
+    # res = hierarchical_clustering(points, 9)
+    res = k_means_clustering(sorted(points, key=lambda p: p.population()), 9, 5)
 
     map_img = plt.imread("map/USA_Counties.png")
     im_plot = plt.imshow(map_img)
@@ -68,10 +65,16 @@ with open("unifiedCancerData/unifiedCancerData_3108.csv", "r") as csv_file:
     for c in res:
         for e in c.get_elements():
             plt.plot((c.get_centroid().x(), e.x()), (c.get_centroid().y(), e.y()),
-                     linestyle='-', c='#FF000066', linewidth=0.5)
+                     linestyle='-', c='#FF0000CC', linewidth=0.5)
     plt.scatter(x=xs, y=ys, s=ps, c=colours_list)
     plt.scatter(x=list(map(lambda c_i: c_i.get_centroid().x(), res)),
                 y=list(map(lambda c_i: c_i.get_centroid().y(), res)),
                 s=50, marker="*", c="k", zorder=10)
 
     plt.show()
+
+    hierarchical_errors = list(map(lambda cluster: cluster.get_error(), hierarchical_clustering(points, 16)))
+    k_means_errors = list(map(lambda cluster: cluster.get_error(), k_means_clustering(points, 16, 5)))
+
+    print("DIST HIERARCHICAL:", sum(hierarchical_errors))
+    print("DIST K MEANS:", sum(k_means_errors))

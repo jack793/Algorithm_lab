@@ -85,3 +85,11 @@ class Cluster(object):
 
     def __repr__(self):
         return "(" + str(self.get_elements()) + ": " + str(self.get_error()) + ")"
+
+
+class CountyCluster(Cluster):
+
+    def _calculate_error(self):
+        self._error = sum(map(lambda county: county.population() * pow(Point.distance(county, self.get_centroid()), 2),
+                              self.get_elements()))
+        self._error_cached = True
